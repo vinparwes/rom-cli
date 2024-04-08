@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/welcomeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.rom_cli.ui.fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/navigateToAnalysis"
+            app:destination="@id/analysisFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/navigateToProfile"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/navigateToStatistics"
+            app:destination="@id/statisticsFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/navigateToAbout"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.rom_cli.ui.fragment.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.rom_cli.ui.fragment.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/navigateToHome"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.example.rom_cli.ui.fragment.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/navigateToRegistration"
+            app:destination="@id/registerFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.rom_cli.ui.fragment.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" >
+        <action
+            android:id="@+id/action_aboutFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.example.rom_cli.ui.fragment.StatisticsFragment"
+        android:label="fragment_statistics"
+        tools:layout="@layout/fragment_statistics" >
+        <action
+            android:id="@+id/action_statisticsFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/analysisFragment"
+        android:name="com.example.rom_cli.ui.fragment.AnalysisFragment"
+        android:label="fragment_analysis"
+        tools:layout="@layout/fragment_analysis" >
+        <action
+            android:id="@+id/action_analysisFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/navigateToShoulderAnalysis"
+            app:destination="@id/shoulderAnalysisFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/shoulderAnalysisFragment"
+        android:name="com.example.rom_cli.ui.fragment.ShoulderAnalysisFragment"
+        android:label="fragment_shoulder_analysis"
+        tools:layout="@layout/fragment_shoulder_analysis" >
+        <action
+            android:id="@+id/navigateToPoseIntroduction"
+            app:destination="@id/poseIntroductionFragment" />
+        <action
+            android:id="@+id/action_shoulderAnalysisFragment_to_poseIntroductionFragment2"
+            app:destination="@id/poseIntroductionFragment" />
+        <action
+            android:id="@+id/action_shoulderAnalysisFragment_to_poseIntroductionFragment3"
+            app:destination="@id/poseIntroductionFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/poseIntroductionFragment"
+        android:name="com.example.rom_cli.ui.fragment.PoseIntroductionFragment"
+        android:label="fragment_pose_introduction"
+        tools:layout="@layout/fragment_pose_introduction" >
+        <argument
+            android:name="poseSelection"
+            app:argType="string" />
+        <action
+            android:id="@+id/navigateToCamera"
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.rom_cli.ui.fragment.vision.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
+</navigation>

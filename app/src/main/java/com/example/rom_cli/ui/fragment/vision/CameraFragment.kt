@@ -1,0 +1,171 @@
+package com.example.rom_cli.ui.fragment.vision
+
+import android.annotation.SuppressLint
+import android.content.res.Configuration
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.camera.core.AspectRatio
+import androidx.camera.core.Camera
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
+import com.example.rom_cli.data.PoseLandmarkerHelper
+import com.example.rom_cli.databinding.FragmentCameraBinding
+import com.google.mediapipe.tasks.vision.core.RunningMode
+import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
+import java.lang.IllegalStateException
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+
+class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
+
+    private var tag = "Pose Landmarker"
+    private var _binding : FragmentCameraBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var backgroundExecutor: ExecutorService
+
+    private lateinit var poseLandmarkerHelper: PoseLandmarkerHelper
+    private var camera: Camera? = null
+    private var preview: Preview? = null
+    private var imageAnalyzer : ImageAnalysis? = null
+    private var cameraProvider: ProcessCameraProvider? = null
+    private var cameraFacing = CameraSelector.LENS_FACING_FRONT
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        _binding = FragmentCameraBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        backgroundExecutor = Executors.newSingleThreadExecutor()
+        binding.viewFinder.post {
+            setUpCamera()
+        }
+        //TODO Hard-coded values?
+        backgroundExecutor.execute {
+            poseLandmarkerHelper = PoseLandmarkerHelper(
+                context = requireContext(),
+                runningMode = RunningMode.LIVE_STREAM,
+                minPoseDetectionConfidence = 0.5f,
+                minPoseTrackingConfidence = 0.5f,
+                minPosePresenceConfidence = 0.5f,
+                currentDelegate = 0,
+                poseLandmarkerHelperListener = this
+            )
+        }
+    }
+
+    private fun setUpCamera() {
+        val cameraProviderFuture =
+            ProcessCameraProvider.getInstance(requireContext())
+        cameraProviderFuture.addListener(
+            {
+                // CameraProvider
+                cameraProvider = cameraProviderFuture.get()
+
+                // Build and bind the camera use cases
+                bindCameraUseCases()
+            }, ContextCompat.getMainExecutor(requireContext())
+        )
+    }
+
+
+    @SuppressLint("UnsafeOptInUsageError")
+    private fun bindCameraUseCases() {
+        val cameraProvider = cameraProvider ?: throw IllegalStateException("Initialization Failed")
+        val cameraSelector = CameraSelector.Builder().requireLensFacing(cameraFacing).build()
+
+        preview = Preview.Builder()
+            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+            .setTargetRotation(binding.viewFinder.display.rotation)
+            .build()
+
+        imageAnalyzer =
+            ImageAnalysis.Builder()
+                .setTargetRotation(binding.viewFinder.display.rotation)
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                .build()
+                .also {
+                    it.setAnalyzer(backgroundExecutor) {
+                        image -> detectPose(image)
+                    }
+                }
+        cameraProvider.unbindAll()
+        try {
+            camera = cameraProvider.bindToLifecycle(
+                this, cameraSelector, preview, imageAnalyzer
+            )
+
+            preview?.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+        } catch (exc: Exception) {
+            Log.e(tag, "Use case binding failed", exc)
+        }
+    }
+
+    private fun detectPose(imageProxy: ImageProxy) {
+        if(this::poseLandmarkerHelper.isInitialized) {
+            poseLandmarkerHelper.detectLiveStream(
+                imageProxy = imageProxy,
+                isFrontCamera = cameraFacing == CameraSelector.LENS_FACING_FRONT
+            )
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        imageAnalyzer?.targetRotation =
+            binding.viewFinder.display.rotation
+    }
+
+    override fun onResults(
+        resultBundle: PoseLandmarkerHelper.ResultBundle
+    ) {
+        activity?.runOnUiThread {
+            if (binding != null) {
+                /*
+                binding.bottomSheetLayout.inferenceTimeVal.text =
+                    String.format("%d ms", resultBundle.inferenceTime)
+                */
+                // Pass necessary information to OverlayView for drawing on the canvas
+                binding.overlay.setResults(
+                    resultBundle.results.first(),
+                    resultBundle.inputImageHeight,
+                    resultBundle.inputImageWidth,
+                    RunningMode.LIVE_STREAM
+                )
+                val result : PoseLandmarkerResult = resultBundle.results.first()
+                // Force a redraw
+                binding.overlay.invalidate()
+            }
+        }
+    }
+
+    override fun onError(error: String, errorCode: Int) {
+        activity?.runOnUiThread {
+            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+            if (errorCode == PoseLandmarkerHelper.GPU_ERROR) {
+                /*
+                binding.bottomSheetLayout.spinnerDelegate.setSelection(
+                    PoseLandmarkerHelper.DELEGATE_CPU, false
+                )
+
+                 */
+            }
+        }
+    }
+}
