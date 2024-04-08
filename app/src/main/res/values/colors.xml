@@ -9,4 +9,5 @@
     <color name="red">#ffff0000</color>
     <color name="yellow">#FFFF00</color>
     <color name="green">#0BDA51</color>
+    <color name="mp_color_primary">#007F8B</color>
 </resources>

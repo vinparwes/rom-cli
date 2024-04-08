@@ -32,7 +32,10 @@ class PoseIntroductionFragment : Fragment() {
         binding.heading.text = args.poseSelection
         binding.startVision.setOnClickListener {
             if(getPermission()) {
-                Navigation.findNavController(binding.root).navigate(R.id.navigateToCamera)
+                print("POSE: " + args.poseSelection)
+                print("POSITION" + binding.leftRadio.isSelected)
+                val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, binding.leftRadio.isSelected)
+                Navigation.findNavController(binding.root).navigate(action)
             }
         }
         //TODO Images
@@ -67,8 +70,6 @@ class PoseIntroductionFragment : Fragment() {
             PERMISSION_REQUEST_CODE -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_SHORT)
                     .show()
-
-                // main logic
             } else {
                 Toast.makeText(requireContext(), "Permission Denied", Toast.LENGTH_SHORT)
                     .show()

@@ -127,5 +127,13 @@
         android:id="@+id/cameraFragment"
         android:name="com.example.rom_cli.ui.fragment.vision.CameraFragment"
         android:label="fragment_camera"
-        tools:layout="@layout/fragment_camera" />
+        tools:layout="@layout/fragment_camera" >
+        <argument
+            android:name="poseName"
+            app:argType="string" />
+        <argument
+            android:name="leftJoint"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
 </navigation>

@@ -8,30 +8,27 @@ import android.util.AttributeSet
 import android.view.View
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
+import java.lang.Math.toDegrees
+import kotlin.math.acos
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.sqrt
 
 class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     private var results: PoseLandmarkerResult? = null
     private var pointPaint = Paint()
     private var linePaint = Paint()
-
     private var scaleFactor: Float = 1f
     private var imageWidth: Int = 1
     private var imageHeight: Int = 1
 
-    private var LEFT_SHOULDER_POINT: Int = 11
-    private var RIGHT_SHOULDER_POINT: Int = 12
-
-    private var LEFT_ELBOW_POINT: Int = 13
-    private var RIGHT_ELBOW_POINT: Int = 14
-
-    private var LEFT_HAND_BASE_POINT: Int = 15
-    private var RIGHT_HAND_BASE_POINT: Int = 16
+    var primaryPoint: Int? = null
+    var secondPoint: Int? = null
+    var thirdPoint: Int? = null
 
     init {
-        //initPaints()
+        initPaints()
     }
 
     fun clear() {
@@ -39,21 +36,17 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         pointPaint.reset()
         linePaint.reset()
         invalidate()
-        //initPaints()
+        initPaints()
     }
-    /*
+
     private fun initPaints() {
-        linePaint.color =
-            ContextCompat.getColor(context!!, R.color.mp_color_primary)
+        linePaint.color = Color.RED
         linePaint.strokeWidth = LANDMARK_STROKE_WIDTH
         linePaint.style = Paint.Style.STROKE
-
-        pointPaint.color = Color.YELLOW
-        pointPaint.strokeWidth = LANDMARK_STROKE_WIDTH
+        pointPaint.color = Color.RED
+        pointPaint.strokeWidth = LANDMARK_STROKE_WIDTH + 30f
         pointPaint.style = Paint.Style.FILL
     }
-
-     */
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
@@ -64,70 +57,70 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         }
         results?.let { poseLandmarkerResult ->
             for(landmark in poseLandmarkerResult.landmarks()) {
-                /*
-                for(normalizedLandmark in landmark) {
+                val startingPoint = landmark[primaryPoint!!]
+                val secondPoint = landmark[secondPoint!!]
+                val thirdPoint = landmark[thirdPoint!!]
+                val arr = arrayOf(
+                    startingPoint,
+                    secondPoint,
+                    thirdPoint
+                )
+                for(normalizedLandmark in arr) {
                     canvas.drawPoint(
                         normalizedLandmark.x() * imageWidth * scaleFactor,
                         normalizedLandmark.y() * imageHeight * scaleFactor,
                         pointPaint
                     )
                 }
-
-                 */
-                val leftShoulderPoint = landmark[LEFT_SHOULDER_POINT]
-                val leftHandPoint = landmark[LEFT_HAND_BASE_POINT]
-                val rightShoulderPoint = landmark[RIGHT_SHOULDER_POINT];
-                val rightHandPoint = landmark[RIGHT_HAND_BASE_POINT];
-
-
-                /*
-                val distance = sqrt(
-                    (leftShoulderPoint.x() - leftHandPoint.x()).toDouble().pow(2.0)
-                    + (leftShoulderPoint.y() - leftHandPoint.y()).toDouble().pow(2.0)
-                )
+                val angle = getAngle(startingPoint, secondPoint, thirdPoint).toInt()
                 canvas.drawText(
-                    distance.toString().subSequence(0, 4).toString(),
-                    500f,
+                    "Angle: $angle",
+                    (imageWidth / 2).toFloat(),
                     500f,
                     paint
                 )
-                 */
-                canvas.drawText(
-                    leftShoulderPoint.z().toString(),
-                    leftShoulderPoint.x() * imageWidth * scaleFactor,
-                    leftShoulderPoint.y() * imageHeight * scaleFactor,
-                    paint
-                )
-                canvas.drawText(
-                    leftHandPoint.z().toString(),
-                    leftHandPoint.x() * imageWidth * scaleFactor,
-                    leftHandPoint.y() * imageHeight * scaleFactor,
-                    paint
-                )
-                canvas.drawText(
-                    rightShoulderPoint.z().toString(),
-                    rightShoulderPoint.x() * imageWidth * scaleFactor,
-                    rightShoulderPoint.y() * imageHeight * scaleFactor,
-                    paint
-                )
-                canvas.drawText(
-                    rightHandPoint.z().toString(),
-                    rightHandPoint.x() * imageWidth * scaleFactor,
-                    rightHandPoint.y() * imageHeight * scaleFactor,
-                    paint
-                )
-                /*
-                PoseLandmarker.POSE_LANDMARKS.forEach {
-                    canvas.drawLine(
-                        poseLandmarkerResult.landmarks().get(0).get(it!!.start()).x() * imageWidth * scaleFactor,
-                        poseLandmarkerResult.landmarks().get(0).get(it.start()).y() * imageHeight * scaleFactor,
-                        poseLandmarkerResult.landmarks().get(0).get(it.end()).x() * imageWidth * scaleFactor,
-                        poseLandmarkerResult.landmarks().get(0).get(it.end()).y() * imageHeight * scaleFactor,
-                        linePaint)
-                }
-
-                 */
             }
+        }
+    }
+
+    /**
+     * Retrieve angle between three points, A
+     */
+    private fun getAngle(
+        A: com.google.mediapipe.tasks.components.containers.NormalizedLandmark,
+        B: com.google.mediapipe.tasks.components.containers.NormalizedLandmark,
+        C: com.google.mediapipe.tasks.components.containers.NormalizedLandmark
+    ): Float {
+        val ABx = B.x() - A.x()
+        val ABy = B.y() - A.y()
+        val ACx = C.x() - A.x()
+        val ACy = C.y() - A.y()
+
+        val dotProduct = ABx * ACx + ABy * ACy
+        val magnitudeAB = sqrt(ABx * ABx + ABy * ABy)
+        val magnitudeAC = sqrt(ACx * ACx + ACy * ACy)
+        val cosineAngle = dotProduct / (magnitudeAB * magnitudeAC)
+        var angle = acos(cosineAngle)
+
+        angle = toDegrees(angle.toDouble()).toFloat()
+
+        val orientation = orientation(A, B, C)
+        if (orientation == -1) {
+            angle = 360 - angle
+        }
+        return angle
+    }
+
+    // Calculate orientation using cross product of vectors AB and AC
+    private fun orientation(
+        A: com.google.mediapipe.tasks.components.containers.NormalizedLandmark,
+        B: com.google.mediapipe.tasks.components.containers.NormalizedLandmark,
+        C: com.google.mediapipe.tasks.components.containers.NormalizedLandmark): Int {
+        val value = (B.y() - A.y()) * (C.x() - B.x()) - (B.x() - A.x()) * (C.y() - B.y())
+        return when {
+            value.toInt() == 0 -> 0  // Collinear
+            value > 0 -> 1   // Clockwise orientation
+            else -> -1       // Counterclockwise orientation
         }
     }
 
@@ -156,7 +149,6 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         }
         invalidate()
     }
-
     companion object {
         private const val LANDMARK_STROKE_WIDTH = 12F
     }

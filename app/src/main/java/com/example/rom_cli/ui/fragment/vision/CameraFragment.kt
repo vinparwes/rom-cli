@@ -17,8 +17,11 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.navArgs
+import com.example.rom_cli.R
 import com.example.rom_cli.data.PoseLandmarkerHelper
 import com.example.rom_cli.databinding.FragmentCameraBinding
+import com.example.rom_cli.ui.fragment.PoseIntroductionFragmentArgs
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
 import java.lang.IllegalStateException
@@ -29,15 +32,25 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
     private var tag = "Pose Landmarker"
     private var _binding : FragmentCameraBinding? = null
+
+    private val args: CameraFragmentArgs by navArgs()
     private val binding get() = _binding!!
     private lateinit var backgroundExecutor: ExecutorService
-
     private lateinit var poseLandmarkerHelper: PoseLandmarkerHelper
     private var camera: Camera? = null
     private var preview: Preview? = null
     private var imageAnalyzer : ImageAnalysis? = null
     private var cameraProvider: ProcessCameraProvider? = null
     private var cameraFacing = CameraSelector.LENS_FACING_FRONT
+
+    private var LEFT_SHOULDER_POINT: Int = 11
+    private var RIGHT_SHOULDER_POINT: Int = 12
+    private var LEFT_ELBOW_POINT: Int = 13
+    private var RIGHT_ELBOW_POINT: Int = 14
+    private var LEFT_HAND_BASE_POINT: Int = 15
+    private var RIGHT_HAND_BASE_POINT: Int = 16
+    private var LEFT_WAIST_POINT: Int = 23
+    private var RIGHT_WAIST_POINT: Int = 24
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +64,8 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val overlayView = view.findViewById<OverlayView>(R.id.overlay)
+        assignPoseMarkings(overlayView, args.poseName)
         backgroundExecutor = Executors.newSingleThreadExecutor()
         binding.viewFinder.post {
             setUpCamera()
@@ -66,6 +81,56 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 currentDelegate = 0,
                 poseLandmarkerHelperListener = this
             )
+        }
+    }
+
+    private fun assignPoseMarkings(overlayView: OverlayView?, poseName: String) {
+        if(args.leftJoint) {
+            when(poseName) {
+                "Abduction" -> {
+                    overlayView?.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView?.secondPoint = LEFT_ELBOW_POINT
+                    overlayView?.thirdPoint = LEFT_WAIST_POINT
+                }
+                "Adduction" -> {
+                    overlayView?.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView?.secondPoint = LEFT_SHOULDER_POINT
+                    overlayView?.thirdPoint = LEFT_SHOULDER_POINT
+                }
+                "Forward Flexion" -> {
+                    overlayView?.primaryPoint = LEFT_HAND_BASE_POINT
+                    overlayView?.secondPoint = LEFT_ELBOW_POINT
+                    overlayView?.thirdPoint = LEFT_WAIST_POINT
+                }
+                "External Rotation" -> {
+                    overlayView?.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView?.secondPoint = LEFT_SHOULDER_POINT
+                    overlayView?.thirdPoint = LEFT_SHOULDER_POINT
+                }
+            }
+        } else {
+            when(poseName) {
+                "Abduction" -> {
+                    overlayView?.primaryPoint = RIGHT_SHOULDER_POINT
+                    overlayView?.secondPoint = RIGHT_ELBOW_POINT
+                    overlayView?.thirdPoint = RIGHT_WAIST_POINT
+                }
+                "Adduction" -> {
+                    overlayView?.primaryPoint = RIGHT_SHOULDER_POINT
+                    overlayView?.secondPoint = RIGHT_SHOULDER_POINT
+                    overlayView?.thirdPoint = RIGHT_SHOULDER_POINT
+                }
+                "Forward Flexion" -> {
+                    overlayView?.primaryPoint = RIGHT_HAND_BASE_POINT
+                    overlayView?.secondPoint = RIGHT_ELBOW_POINT
+                    overlayView?.thirdPoint = RIGHT_WAIST_POINT
+                }
+                "External Rotation" -> {
+                    overlayView?.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView?.secondPoint = LEFT_SHOULDER_POINT
+                    overlayView?.thirdPoint = LEFT_SHOULDER_POINT
+                }
+            }
         }
     }
 
@@ -130,6 +195,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         super.onConfigurationChanged(newConfig)
         imageAnalyzer?.targetRotation =
             binding.viewFinder.display.rotation
+        setUpCamera()
     }
 
     override fun onResults(
