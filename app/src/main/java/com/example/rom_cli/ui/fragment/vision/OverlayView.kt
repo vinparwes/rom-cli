@@ -19,6 +19,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     private var results: PoseLandmarkerResult? = null
     private var pointPaint = Paint()
     private var linePaint = Paint()
+    private var primaryPointPaint = Paint()
     private var scaleFactor: Float = 1f
     private var imageWidth: Int = 1
     private var imageHeight: Int = 1
@@ -40,12 +41,17 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     }
 
     private fun initPaints() {
-        linePaint.color = Color.RED
+        linePaint.color = Color.WHITE
         linePaint.strokeWidth = LANDMARK_STROKE_WIDTH
         linePaint.style = Paint.Style.STROKE
+
         pointPaint.color = Color.RED
         pointPaint.strokeWidth = LANDMARK_STROKE_WIDTH + 30f
         pointPaint.style = Paint.Style.FILL
+
+        primaryPointPaint.color = Color.GREEN
+        primaryPointPaint.strokeWidth = LANDMARK_STROKE_WIDTH + 30f
+        primaryPointPaint.style = Paint.Style.FILL
     }
 
     override fun draw(canvas: Canvas) {

@@ -21,7 +21,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.R
 import com.example.rom_cli.data.PoseLandmarkerHelper
 import com.example.rom_cli.databinding.FragmentCameraBinding
-import com.example.rom_cli.ui.fragment.PoseIntroductionFragmentArgs
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
 import java.lang.IllegalStateException
@@ -198,16 +197,10 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         setUpCamera()
     }
 
-    override fun onResults(
-        resultBundle: PoseLandmarkerHelper.ResultBundle
-    ) {
+    override fun onResults(resultBundle: PoseLandmarkerHelper.ResultBundle) {
         activity?.runOnUiThread {
             if (binding != null) {
-                /*
-                binding.bottomSheetLayout.inferenceTimeVal.text =
-                    String.format("%d ms", resultBundle.inferenceTime)
-                */
-                // Pass necessary information to OverlayView for drawing on the canvas
+
                 binding.overlay.setResults(
                     resultBundle.results.first(),
                     resultBundle.inputImageHeight,
