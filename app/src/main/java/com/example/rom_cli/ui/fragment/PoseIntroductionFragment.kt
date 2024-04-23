@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import com.example.rom_cli.R
 import com.example.rom_cli.databinding.FragmentPoseIntroductionBinding
 
 class PoseIntroductionFragment : Fragment() {
@@ -34,7 +33,7 @@ class PoseIntroductionFragment : Fragment() {
             if(getPermission()) {
                 print("POSE: " + args.poseSelection)
                 print("POSITION" + binding.leftRadio.isSelected)
-                val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, binding.leftRadio.isSelected)
+                val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, binding.leftRadio.isChecked)
                 Navigation.findNavController(binding.root).navigate(action)
             }
         }

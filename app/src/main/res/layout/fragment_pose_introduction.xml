@@ -28,6 +28,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:maxWidth="75dp"
+            android:maxHeight="75dp"
             tools:src="@tools:sample/avatars" />
 
         <TextView
