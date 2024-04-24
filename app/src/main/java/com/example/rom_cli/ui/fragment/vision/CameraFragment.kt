@@ -114,41 +114,41 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         if(args.leftJoint) {
             when(poseName) {
                 "Abduction" -> {
-                    overlayView!!.primaryPoint = LEFT_SHOULDER_POINT
-                    overlayView!!.secondPoint = LEFT_ELBOW_POINT
-                    overlayView!!.basePoint = LEFT_WAIST_POINT
+                    overlayView.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView.secondPoint = LEFT_ELBOW_POINT
+                    overlayView.basePoint = LEFT_WAIST_POINT
                 }
                 "Adduction" -> {
-                    overlayView!!.primaryPoint = LEFT_SHOULDER_POINT
-                    overlayView!!.secondPoint = LEFT_WRIST_POINT
+                    overlayView.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView.secondPoint = LEFT_WRIST_POINT
                 }
                 "External Rotation" -> {
-                    overlayView!!.primaryPoint = LEFT_ELBOW_POINT
-                    overlayView!!.secondPoint = LEFT_WRIST_POINT
+                    overlayView.primaryPoint = LEFT_ELBOW_POINT
+                    overlayView.secondPoint = LEFT_WRIST_POINT
                 }
                 "Forward Flexion" -> {
-                    overlayView!!.primaryPoint = LEFT_ELBOW_POINT
-                    overlayView!!.secondPoint = LEFT_WRIST_POINT
+                    overlayView.primaryPoint = LEFT_ELBOW_POINT
+                    overlayView.secondPoint = LEFT_WRIST_POINT
                 }
             }
         } else {
             when(poseName) {
                 "Abduction" -> {
-                    overlayView!!.primaryPoint = RIGHT_SHOULDER_POINT
-                    overlayView!!.secondPoint = RIGHT_ELBOW_POINT
-                    overlayView!!.basePoint = RIGHT_WAIST_POINT
+                    overlayView.primaryPoint = RIGHT_SHOULDER_POINT
+                    overlayView.secondPoint = RIGHT_ELBOW_POINT
+                    overlayView.basePoint = RIGHT_WAIST_POINT
                 }
                 "Adduction" -> {
-                    overlayView!!.primaryPoint = RIGHT_SHOULDER_POINT
-                    overlayView!!.secondPoint = RIGHT_WRIST_POINT
+                    overlayView.primaryPoint = RIGHT_SHOULDER_POINT
+                    overlayView.secondPoint = RIGHT_WRIST_POINT
                 }
                 "External Rotation" -> {
-                    overlayView!!.primaryPoint = RIGHT_ELBOW_POINT
-                    overlayView!!.secondPoint = RIGHT_WRIST_POINT
+                    overlayView.primaryPoint = RIGHT_ELBOW_POINT
+                    overlayView.secondPoint = RIGHT_WRIST_POINT
                 }
                 "Forward Flexion" -> {
-                    overlayView!!.primaryPoint = RIGHT_HAND_BASE_POINT
-                    overlayView!!.secondPoint = RIGHT_ELBOW_POINT
+                    overlayView.primaryPoint = RIGHT_HAND_BASE_POINT
+                    overlayView.secondPoint = RIGHT_ELBOW_POINT
                 }
             }
         }

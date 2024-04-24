@@ -69,8 +69,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         canvas.drawCircle(
-            targetPoint!!.first * imageWidth * scaleFactor,
-            targetPoint!!.second * imageHeight * scaleFactor,
+            targetPoint.first * imageWidth * scaleFactor,
+            targetPoint.second * imageHeight * scaleFactor,
             0.05f * 750,
             targetPointPaint
         )
@@ -158,8 +158,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             val landmark = results!!.landmarks().first()
             val primary = landmark[primaryPoint!!]
 
-            if(inRange(primary.x(), targetPoint!!.first, 0.03f)
-                && inRange(primary.y(), targetPoint!!.second, 0.03f)) {
+            if(inRange(primary.x(), targetPoint.first, 0.03f)
+                && inRange(primary.y(), targetPoint.second, 0.03f)) {
                 Log.i("INFO", "IN RANGE")
                 positionLocked = true
             } else {

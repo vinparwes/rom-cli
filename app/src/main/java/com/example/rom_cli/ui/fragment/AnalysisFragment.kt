@@ -15,10 +15,7 @@ class AnalysisFragment : Fragment() {
     private var _binding : FragmentAnalysisBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentAnalysisBinding.inflate(inflater, container, false)
         _binding!!.shoulderSelector.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToShoulderAnalysis) }
         _binding!!.kneeSelector.setOnClickListener { Toast.makeText(context, "Not yet implemented...", Toast.LENGTH_LONG).show() }

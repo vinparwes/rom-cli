@@ -1,9 +1,7 @@
 package com.example.rom_cli.data
 
-class PoseValidator() {
+class PoseValidator {
 
 
-    companion object {
-
-    }
+    companion object
 }
