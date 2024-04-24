@@ -3,7 +3,6 @@ package com.example.rom_cli.ui.fragment
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,22 +12,20 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import com.example.rom_cli.R
 import com.example.rom_cli.databinding.FragmentPoseIntroductionBinding
 
 class PoseIntroductionFragment : Fragment() {
 
     private val PERMISSION_REQUEST_CODE = 200
 
-    val args: PoseIntroductionFragmentArgs by navArgs()
-    private var _binding : FragmentPoseIntroductionBinding? = null;
+    private val args: PoseIntroductionFragmentArgs by navArgs()
+    private var _binding : FragmentPoseIntroductionBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         _binding = FragmentPoseIntroductionBinding.inflate(inflater, container, false)
         binding.heading.text = args.poseSelection
         binding.startVision.setOnClickListener {
@@ -44,7 +41,6 @@ class PoseIntroductionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestPermission()
-
     }
 
     private fun getPermission(): Boolean {
@@ -55,7 +51,7 @@ class PoseIntroductionFragment : Fragment() {
 
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
-            requireActivity(), arrayOf<String>(Manifest.permission.CAMERA),
+            requireActivity(), arrayOf(Manifest.permission.CAMERA),
             PERMISSION_REQUEST_CODE
         )
     }

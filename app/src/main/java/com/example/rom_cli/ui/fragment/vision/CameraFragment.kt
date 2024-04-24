@@ -2,6 +2,8 @@ package com.example.rom_cli.ui.fragment.vision
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -53,18 +55,41 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private var LEFT_WRIST_POINT: Int = 15
     private var RIGHT_WRIST_POINT: Int = 16
 
+    private var runningFlag: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
+        binding.startStopButton.setOnClickListener { toggleRecording() }
+        binding.startStopButton.isClickable = false
+        //binding.overlay.targetPoint = Point(0.33, 0.5)
         return binding.root
+    }
+
+    private fun calculateScreenCenter() : Point {
+        val displayMetrics = requireContext().resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
+        val centerX = screenWidth / 2
+        val centerY = screenHeight / 2
+        return Point(centerX, centerY)
+    }
+
+    private fun toggleRecording() {
+        if (!runningFlag) {
+            binding.startStopButton.text = resources.getString(R.string.stop)
+            runningFlag = true
+        } else if(runningFlag) {
+            binding.startStopButton.text = resources.getString(R.string.start)
+            runningFlag = false
+        }
     }
 
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        runningFlag = false
         val overlayView = view.findViewById<OverlayView>(R.id.overlay)
         assignPoseMarkings(overlayView, args.poseName)
         backgroundExecutor = Executors.newSingleThreadExecutor()
@@ -86,7 +111,6 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     }
 
     private fun assignPoseMarkings(overlayView: OverlayView, poseName: String) {
-        Log.i("INFO: ", ">>>>>>>>>>>>>>>>> LEFT: " + args.leftJoint.toString() + ", Pose Name: " + poseName.toString())
         if(args.leftJoint) {
             when(poseName) {
                 "Abduction" -> {
@@ -197,15 +221,22 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     override fun onResults(resultBundle: PoseLandmarkerHelper.ResultBundle) {
         activity?.runOnUiThread {
             if (binding != null) {
-
                 binding.overlay.setResults(
                     resultBundle.results.first(),
                     resultBundle.inputImageHeight,
                     resultBundle.inputImageWidth,
                     RunningMode.LIVE_STREAM
                 )
-                val result : PoseLandmarkerResult = resultBundle.results.first()
-                // Force a redraw
+                if(binding.overlay.positionLocked!!) {
+                    binding.cameraLayout.setBackgroundColor(Color.YELLOW)
+                    binding.instructionView.text = resources.getString(R.string.instruction_two)
+                    binding.startStopButton.isClickable = true
+                } else {
+                    binding.instructionView.text = resources.getString(R.string.instruction_one)
+                    binding.cameraLayout.setBackgroundColor(Color.RED)
+                    binding.startStopButton.isClickable = false
+                }
+
                 binding.overlay.invalidate()
             }
         }
@@ -215,12 +246,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         activity?.runOnUiThread {
             Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
             if (errorCode == PoseLandmarkerHelper.GPU_ERROR) {
-                /*
-                binding.bottomSheetLayout.spinnerDelegate.setSelection(
-                    PoseLandmarkerHelper.DELEGATE_CPU, false
-                )
 
-                 */
             }
         }
     }
