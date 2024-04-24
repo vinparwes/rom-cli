@@ -50,6 +50,8 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private var RIGHT_HAND_BASE_POINT: Int = 16
     private var LEFT_WAIST_POINT: Int = 23
     private var RIGHT_WAIST_POINT: Int = 24
+    private var LEFT_WRIST_POINT: Int = 15
+    private var RIGHT_WRIST_POINT: Int = 16
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,51 +85,46 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         }
     }
 
-    private fun assignPoseMarkings(overlayView: OverlayView?, poseName: String) {
+    private fun assignPoseMarkings(overlayView: OverlayView, poseName: String) {
+        Log.i("INFO: ", ">>>>>>>>>>>>>>>>> LEFT: " + args.leftJoint.toString() + ", Pose Name: " + poseName.toString())
         if(args.leftJoint) {
             when(poseName) {
                 "Abduction" -> {
-                    overlayView?.primaryPoint = LEFT_SHOULDER_POINT
-                    overlayView?.secondPoint = LEFT_ELBOW_POINT
-                    overlayView?.thirdPoint = LEFT_WAIST_POINT
+                    overlayView!!.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView!!.secondPoint = LEFT_ELBOW_POINT
+                    overlayView!!.basePoint = LEFT_WAIST_POINT
                 }
                 "Adduction" -> {
-                    overlayView?.primaryPoint = LEFT_SHOULDER_POINT
-                    overlayView?.secondPoint = LEFT_SHOULDER_POINT
-                    overlayView?.thirdPoint = LEFT_SHOULDER_POINT
-                }
-                "Forward Flexion" -> {
-                    overlayView?.primaryPoint = LEFT_HAND_BASE_POINT
-                    overlayView?.secondPoint = LEFT_ELBOW_POINT
-                    overlayView?.thirdPoint = LEFT_WAIST_POINT
+                    overlayView!!.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView!!.secondPoint = LEFT_WRIST_POINT
                 }
                 "External Rotation" -> {
-                    overlayView?.primaryPoint = LEFT_SHOULDER_POINT
-                    overlayView?.secondPoint = LEFT_SHOULDER_POINT
-                    overlayView?.thirdPoint = LEFT_SHOULDER_POINT
+                    overlayView!!.primaryPoint = LEFT_ELBOW_POINT
+                    overlayView!!.secondPoint = LEFT_WRIST_POINT
+                }
+                "Forward Flexion" -> {
+                    overlayView!!.primaryPoint = LEFT_ELBOW_POINT
+                    overlayView!!.secondPoint = LEFT_WRIST_POINT
                 }
             }
         } else {
             when(poseName) {
                 "Abduction" -> {
-                    overlayView?.primaryPoint = RIGHT_SHOULDER_POINT
-                    overlayView?.secondPoint = RIGHT_ELBOW_POINT
-                    overlayView?.thirdPoint = RIGHT_WAIST_POINT
+                    overlayView!!.primaryPoint = RIGHT_SHOULDER_POINT
+                    overlayView!!.secondPoint = RIGHT_ELBOW_POINT
+                    overlayView!!.basePoint = RIGHT_WAIST_POINT
                 }
                 "Adduction" -> {
-                    overlayView?.primaryPoint = RIGHT_SHOULDER_POINT
-                    overlayView?.secondPoint = RIGHT_SHOULDER_POINT
-                    overlayView?.thirdPoint = RIGHT_SHOULDER_POINT
-                }
-                "Forward Flexion" -> {
-                    overlayView?.primaryPoint = RIGHT_HAND_BASE_POINT
-                    overlayView?.secondPoint = RIGHT_ELBOW_POINT
-                    overlayView?.thirdPoint = RIGHT_WAIST_POINT
+                    overlayView!!.primaryPoint = RIGHT_SHOULDER_POINT
+                    overlayView!!.secondPoint = RIGHT_WRIST_POINT
                 }
                 "External Rotation" -> {
-                    overlayView?.primaryPoint = LEFT_SHOULDER_POINT
-                    overlayView?.secondPoint = LEFT_SHOULDER_POINT
-                    overlayView?.thirdPoint = LEFT_SHOULDER_POINT
+                    overlayView!!.primaryPoint = RIGHT_ELBOW_POINT
+                    overlayView!!.secondPoint = RIGHT_WRIST_POINT
+                }
+                "Forward Flexion" -> {
+                    overlayView!!.primaryPoint = RIGHT_HAND_BASE_POINT
+                    overlayView!!.secondPoint = RIGHT_ELBOW_POINT
                 }
             }
         }

@@ -9,8 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/red"
-        >
+        android:background="@color/red">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/view_finder"
@@ -24,7 +23,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:scaleType="fillStart" />
+            app:scaleType="fillStart">
+
+        </androidx.camera.view.PreviewView>
 
         <com.example.rom_cli.ui.fragment.vision.OverlayView
             android:id="@+id/overlay"
@@ -38,6 +39,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/startStopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:text="@string/start"
+            tools:layout_editor_absoluteX="162dp"
+            tools:layout_editor_absoluteY="648dp"
+            tools:ignore="MissingConstraints" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

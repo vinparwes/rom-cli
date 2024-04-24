@@ -26,7 +26,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
 
     var primaryPoint: Int? = null
     var secondPoint: Int? = null
-    var thirdPoint: Int? = null
+    var basePoint: Int? = null
 
     init {
         initPaints()
@@ -65,7 +65,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             for(landmark in poseLandmarkerResult.landmarks()) {
                 val startingPoint = landmark[primaryPoint!!]
                 val secondPoint = landmark[secondPoint!!]
-                val thirdPoint = landmark[thirdPoint!!]
+                val thirdPoint = landmark[basePoint!!]
                 val arr = arrayOf(
                     startingPoint,
                     secondPoint,
@@ -78,6 +78,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                         pointPaint
                     )
                 }
+                /*
                 val angle = getAngle(startingPoint, secondPoint, thirdPoint).toInt()
                 canvas.drawText(
                     "Angle: $angle",
@@ -85,6 +86,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                     500f,
                     paint
                 )
+
+                 */
             }
         }
     }

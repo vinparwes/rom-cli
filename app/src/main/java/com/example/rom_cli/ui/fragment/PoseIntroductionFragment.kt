@@ -3,6 +3,7 @@ package com.example.rom_cli.ui.fragment
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,9 +33,7 @@ class PoseIntroductionFragment : Fragment() {
         binding.heading.text = args.poseSelection
         binding.startVision.setOnClickListener {
             if(getPermission()) {
-                print("POSE: " + args.poseSelection)
-                print("POSITION" + binding.leftRadio.isSelected)
-                val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, binding.leftRadio.isSelected)
+                val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, !binding.leftRadio.isChecked)
                 Navigation.findNavController(binding.root).navigate(action)
             }
         }
