@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.example.rom_cli.R
 import com.example.rom_cli.databinding.FragmentPoseIntroductionBinding
 
 class PoseIntroductionFragment : Fragment() {
@@ -34,7 +35,12 @@ class PoseIntroductionFragment : Fragment() {
                 Navigation.findNavController(binding.root).navigate(action)
             }
         }
-        //TODO Images
+        when(binding.heading.text) {
+            "Abduction" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.abduction))
+            "Adduction" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.adduction))
+            "External Rotation" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.external_rotation))
+            "Forward Flexion" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.forward_flexion))
+        }
         return binding.root
     }
 

@@ -26,17 +26,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:scaleType="fillStart">
 
-            <TextView
-                android:id="@+id/instructionView"
-                android:layout_width="match_parent"
-                android:layout_height="71dp"
-                android:background="#FFFFFF"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
-                android:text="@string/instruction_one"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:typeface="normal" />
         </androidx.camera.view.PreviewView>
 
         <Button
@@ -65,6 +54,24 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/instructionView"
+            android:layout_width="match_parent"
+            android:layout_height="71dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="#FFFFFF"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:text="@string/instruction_one"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:typeface="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
