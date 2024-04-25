@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
@@ -26,15 +25,14 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     private var scaleFactor: Float = 1f
     private var imageWidth: Int = 1
     private var imageHeight: Int = 1
+    private var targetPoint: Pair<Float, Float> = Pair(0.33f, 0.5f)
 
     var primaryPoint: Int? = null
     var secondPoint: Int? = null
-    var basePoint: Int? = 1
-
-    private var targetPoint: Pair<Float, Float> = Pair(0.33f, 0.5f)
+    private var basePoint: Pair<Float, Float>? = null
+    var rangeOfMotion: Int? = null
 
     var positionLocked: Boolean? = null
-
     init {
         positionLocked = false
         initPaints()
@@ -57,11 +55,11 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         pointPaint.strokeWidth = LANDMARK_STROKE_WIDTH + 30f
         pointPaint.style = Paint.Style.FILL
 
-        primaryPointPaint.color = Color.RED
+        primaryPointPaint.color = Color.GREEN
         primaryPointPaint.strokeWidth = LANDMARK_STROKE_WIDTH + 30f
         primaryPointPaint.style = Paint.Style.FILL
 
-        targetPointPaint.color = Color.GREEN
+        targetPointPaint.color = Color.RED
         targetPointPaint.strokeWidth = LANDMARK_STROKE_WIDTH
         targetPointPaint.style = Paint.Style.STROKE
     }
@@ -78,7 +76,6 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             for(landmark in poseLandmarkerResult.landmarks()) {
                 val startingPoint = landmark[primaryPoint!!]
                 val secondPoint = landmark[secondPoint!!]
-                val thirdPoint = landmark[basePoint!!]
 
                 canvas.drawCircle(
                     startingPoint.x() * imageWidth * scaleFactor,
@@ -92,22 +89,15 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                     0.05f * 375,
                     pointPaint
                 )
-                canvas.drawCircle(
-                    thirdPoint.x() * imageWidth * scaleFactor,
-                    thirdPoint.y() * imageHeight * scaleFactor,
-                    0.05f * 375,
-                    pointPaint
-                )
-                /*
-                val angle = getAngle(startingPoint, secondPoint, thirdPoint).toInt()
-                canvas.drawText(
-                    "Angle: $angle",
-                    (imageWidth / 2).toFloat(),
-                    500f,
-                    paint
-                )
-
-                 */
+                if(basePoint != null) {
+                    canvas.drawCircle(
+                        basePoint!!.first * imageWidth * scaleFactor,
+                        basePoint!!.second * imageHeight * scaleFactor,
+                        0.05f * 375,
+                        primaryPointPaint
+                    )
+                    rangeOfMotion = getAngle(startingPoint, secondPoint, basePoint!!).toInt()
+                }
             }
         }
     }
@@ -118,12 +108,12 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     private fun getAngle(
         A: com.google.mediapipe.tasks.components.containers.NormalizedLandmark,
         B: com.google.mediapipe.tasks.components.containers.NormalizedLandmark,
-        C: com.google.mediapipe.tasks.components.containers.NormalizedLandmark
+        C: Pair<Float, Float>
     ): Float {
         val ABx = B.x() - A.x()
         val ABy = B.y() - A.y()
-        val ACx = C.x() - A.x()
-        val ACy = C.y() - A.y()
+        val ACx = C.first - A.x()
+        val ACy = C.second - A.y()
 
         val dotProduct = ABx * ACx + ABy * ACy
         val magnitudeAB = sqrt(ABx * ABx + ABy * ABy)
@@ -144,8 +134,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     private fun orientation(
         A: com.google.mediapipe.tasks.components.containers.NormalizedLandmark,
         B: com.google.mediapipe.tasks.components.containers.NormalizedLandmark,
-        C: com.google.mediapipe.tasks.components.containers.NormalizedLandmark): Int {
-        val value = (B.y() - A.y()) * (C.x() - B.x()) - (B.x() - A.x()) * (C.y() - B.y())
+        C: Pair<Float, Float>): Int {
+        val value = (B.y() - A.y()) * (C.first - B.x()) - (B.x() - A.x()) * (C.second - B.y())
         return when {
             value.toInt() == 0 -> 0  // Collinear
             value > 0 -> 1   // Clockwise orientation
@@ -157,19 +147,21 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         if(results!!.landmarks().size > 0) {
             val landmark = results!!.landmarks().first()
             val primary = landmark[primaryPoint!!]
-
-            if(inRange(primary.x(), targetPoint.first, 0.03f)
-                && inRange(primary.y(), targetPoint.second, 0.03f)) {
-                Log.i("INFO", "IN RANGE")
-                positionLocked = true
-            } else {
-                positionLocked = false
-            }
+            positionLocked = (inRange(primary.x(), targetPoint.first, 0.03f)
+                    && inRange(primary.y(), targetPoint.second, 0.03f))
         }
     }
 
     private fun inRange(base : Float, comparator: Float, range: Float) : Boolean {
         return abs(base - comparator) <= range / 2
+    }
+
+    fun markBasePosition() {
+        if(results!!.landmarks().size > 0 && primaryPoint != null) {
+            val mark = results!!.landmarks().first()
+            val lm = mark[secondPoint!!]
+            basePoint = Pair(lm.x(), lm.y())
+        }
     }
 
     fun setResults(

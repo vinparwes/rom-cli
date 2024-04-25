@@ -3,7 +3,6 @@ package com.example.rom_cli.ui.fragment.vision
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,6 +18,7 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.R
 import com.example.rom_cli.data.PoseLandmarkerHelper
@@ -42,7 +42,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private var preview: Preview? = null
     private var imageAnalyzer : ImageAnalysis? = null
     private var cameraProvider: ProcessCameraProvider? = null
-    private var cameraFacing = CameraSelector.LENS_FACING_BACK
+    private var cameraFacing = CameraSelector.LENS_FACING_FRONT
 
     private var LEFT_SHOULDER_POINT: Int = 11
     private var RIGHT_SHOULDER_POINT: Int = 12
@@ -56,6 +56,10 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private var RIGHT_WRIST_POINT: Int = 16
 
     private var runningFlag: Boolean = false
+
+    private var currentImage : ImageProxy? = null
+    private var beforeImage : ImageProxy? = null
+    private var afterImage : ImageProxy? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,26 +67,24 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
         binding.startStopButton.setOnClickListener { toggleRecording() }
         binding.startStopButton.isClickable = false
-        //binding.overlay.targetPoint = Point(0.33, 0.5)
         return binding.root
-    }
-
-    private fun calculateScreenCenter() : Point {
-        val displayMetrics = requireContext().resources.displayMetrics
-        val screenWidth = displayMetrics.widthPixels
-        val screenHeight = displayMetrics.heightPixels
-        val centerX = screenWidth / 2
-        val centerY = screenHeight / 2
-        return Point(centerX, centerY)
     }
 
     private fun toggleRecording() {
         if (!runningFlag) {
             binding.startStopButton.text = resources.getString(R.string.stop)
             runningFlag = true
+            binding.overlay.markBasePosition()
+            if(currentImage != null) {
+                beforeImage = currentImage
+            }
         } else if(runningFlag) {
             binding.startStopButton.text = resources.getString(R.string.start)
             runningFlag = false
+            if(currentImage != null) {
+                afterImage = currentImage
+                Navigation.findNavController(binding.root).navigate(R.id.navigateToRomResults)
+            }
         }
     }
 
@@ -116,7 +118,6 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 "Abduction" -> {
                     overlayView.primaryPoint = LEFT_SHOULDER_POINT
                     overlayView.secondPoint = LEFT_ELBOW_POINT
-                    overlayView.basePoint = LEFT_WAIST_POINT
                 }
                 "Adduction" -> {
                     overlayView.primaryPoint = LEFT_SHOULDER_POINT
@@ -136,7 +137,6 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 "Abduction" -> {
                     overlayView.primaryPoint = RIGHT_SHOULDER_POINT
                     overlayView.secondPoint = RIGHT_ELBOW_POINT
-                    overlayView.basePoint = RIGHT_WAIST_POINT
                 }
                 "Adduction" -> {
                     overlayView.primaryPoint = RIGHT_SHOULDER_POINT
@@ -159,10 +159,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             ProcessCameraProvider.getInstance(requireContext())
         cameraProviderFuture.addListener(
             {
-                // CameraProvider
                 cameraProvider = cameraProviderFuture.get()
-
-                // Build and bind the camera use cases
                 bindCameraUseCases()
             }, ContextCompat.getMainExecutor(requireContext())
         )
@@ -188,6 +185,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 .also {
                     it.setAnalyzer(backgroundExecutor) {
                         image -> detectPose(image)
+                        currentImage = image
                     }
                 }
         cameraProvider.unbindAll()
@@ -219,6 +217,11 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     }
 
     override fun onResults(resultBundle: PoseLandmarkerHelper.ResultBundle) {
+        val instructionText = if (binding.overlay.positionLocked!!) {
+            resources.getString(R.string.instruction_two)
+        } else {
+            resources.getString(R.string.instruction_one)
+        }
         activity?.runOnUiThread {
             if (binding != null) {
                 binding.overlay.setResults(
@@ -227,16 +230,19 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                     resultBundle.inputImageWidth,
                     RunningMode.LIVE_STREAM
                 )
-                if(binding.overlay.positionLocked!!) {
-                    binding.cameraLayout.setBackgroundColor(Color.YELLOW)
-                    binding.instructionView.text = resources.getString(R.string.instruction_two)
-                    binding.startStopButton.isClickable = true
+                if(!runningFlag) {
+                    binding.instructionView.text = instructionText
+                    if(binding.overlay.positionLocked!!) {
+                        binding.cameraLayout.setBackgroundColor(Color.YELLOW)
+                        binding.startStopButton.isClickable = true
+                    } else {
+                        binding.cameraLayout.setBackgroundColor(Color.RED)
+                        binding.startStopButton.isClickable = false
+                    }
                 } else {
-                    binding.instructionView.text = resources.getString(R.string.instruction_one)
-                    binding.cameraLayout.setBackgroundColor(Color.RED)
-                    binding.startStopButton.isClickable = false
+                    if(binding.overlay.rangeOfMotion != null)
+                        binding.instructionView.text = binding.overlay.rangeOfMotion.toString()
                 }
-
                 binding.overlay.invalidate()
             }
         }

@@ -11,7 +11,7 @@
     <string name="about_header_instruction">How To</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
-    <string name="instruction_one">Align the <b>Red</b> point with the <b>Green</b> circle</string>
+    <string name="instruction_one">Align the <b>Green</b> point with the <b>Red</b> circle</string>
     <string name="instruction_two">Press Start</string>
     <string name="instruction_three">Input ROM</string>
 </resources>
