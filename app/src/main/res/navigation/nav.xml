@@ -136,12 +136,22 @@
             app:argType="boolean"
             android:defaultValue="true" />
         <action
-            android:id="@+id/action_cameraFragment_to_romResultsFragment"
+            android:id="@+id/navigateToRomResults"
             app:destination="@id/romResultsFragment" />
     </fragment>
     <fragment
         android:id="@+id/romResultsFragment"
         android:name="com.example.rom_cli.ui.fragment.RomResultsFragment"
         android:label="fragment_rom_results"
-        tools:layout="@layout/fragment_rom_results" />
+        tools:layout="@layout/fragment_rom_results" >
+        <argument
+            android:name="beforeImageBitMap"
+            app:argType="android.graphics.Bitmap" />
+        <argument
+            android:name="afterImageBitMap"
+            app:argType="android.graphics.Bitmap" />
+        <argument
+            android:name="finalRom"
+            app:argType="string" />
+    </fragment>
 </navigation>

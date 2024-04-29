@@ -156,7 +156,8 @@ class PoseLandmarkerHelper(
             )
 
         imageProxy.use { bitmapBuffer.copyPixelsFromBuffer(imageProxy.planes[0].buffer) }
-        imageProxy.close()
+        //TODO
+        //imageProxy.close()
 
         val matrix = Matrix().apply {
             // Rotate the frame received from the camera to be in the same direction as it'll be shown
@@ -187,14 +188,8 @@ class PoseLandmarkerHelper(
     @VisibleForTesting
     fun detectAsync(mpImage: MPImage, frameTime: Long) {
         poseLandmarker?.detectAsync(mpImage, frameTime)
-        // As we're using running mode LIVE_STREAM, the landmark result will
-        // be returned in returnLivestreamResult function
     }
 
-    // Accepts the URI for a video file loaded from the user's gallery and attempts to run
-    // pose landmarker inference on the video. This process will evaluate every
-    // frame in the video and attach the results to a bundle that will be
-    // returned.
     fun detectVideoFile(
         videoUri: Uri,
         inferenceIntervalMs: Long
@@ -205,31 +200,19 @@ class PoseLandmarkerHelper(
                         " while not using RunningMode.VIDEO"
             )
         }
-
-        // Inference time is the difference between the system time at the start and finish of the
-        // process
         val startTime = SystemClock.uptimeMillis()
 
         var didErrorOccurred = false
 
-        // Load frames from the video and run the pose landmarker.
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(context, videoUri)
         val videoLengthMs =
             retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
                 ?.toLong()
-
-        // Note: We need to read width/height from frame instead of getting the width/height
-        // of the video directly because MediaRetriever returns frames that are smaller than the
-        // actual dimension of the video file.
         val firstFrame = retriever.getFrameAtTime(0)
         val width = firstFrame?.width
         val height = firstFrame?.height
-
-        // If the video is invalid, returns a null detection result
         if ((videoLengthMs == null) || (width == null) || (height == null)) return null
-
-        // Next, we'll get one frame every frameInterval ms, then run detection on these frames.
         val resultList = mutableListOf<PoseLandmarkerResult>()
         val numberOfFrameToRead = videoLengthMs.div(inferenceIntervalMs)
 
@@ -283,8 +266,6 @@ class PoseLandmarkerHelper(
         }
     }
 
-    // Accepted a Bitmap and runs pose landmarker inference on it to return
-    // results back to the caller
     fun detectImage(image: Bitmap): ResultBundle? {
         if (runningMode != RunningMode.IMAGE) {
             throw IllegalArgumentException(
@@ -293,12 +274,7 @@ class PoseLandmarkerHelper(
             )
         }
 
-
-        // Inference time is the difference between the system time at the
-        // start and finish of the process
         val startTime = SystemClock.uptimeMillis()
-
-        // Convert the input Bitmap object to an MPImage object to run inference
         val mpImage = BitmapImageBuilder(image).build()
 
         // Run pose landmarker using MediaPipe Pose Landmarker API
@@ -311,16 +287,12 @@ class PoseLandmarkerHelper(
                 image.width
             )
         }
-
-        // If poseLandmarker?.detect() returns null, this is likely an error. Returning null
-        // to indicate this.
         poseLandmarkerHelperListener?.onError(
             "Pose Landmarker failed to detect."
         )
         return null
     }
 
-    // Return the landmark result to this PoseLandmarkerHelper's caller
     private fun returnLivestreamResult(
         result: PoseLandmarkerResult,
         input: MPImage
@@ -337,9 +309,6 @@ class PoseLandmarkerHelper(
             )
         )
     }
-
-    // Return errors thrown during detection to this PoseLandmarkerHelper's
-    // caller
     private fun returnLivestreamError(error: RuntimeException) {
         poseLandmarkerHelperListener?.onError(
             error.message ?: "An unknown error has occurred"

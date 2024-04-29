@@ -2,32 +2,38 @@ package com.example.rom_cli.ui.fragment.vision
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.media.Image
+import android.media.MediaCodec
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.OptIn
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.R
 import com.example.rom_cli.data.PoseLandmarkerHelper
 import com.example.rom_cli.databinding.FragmentCameraBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
-import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
-import java.lang.IllegalStateException
+import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+
 
 class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
@@ -57,9 +63,9 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
     private var runningFlag: Boolean = false
 
-    private var currentImage : ImageProxy? = null
-    private var beforeImage : ImageProxy? = null
-    private var afterImage : ImageProxy? = null
+    private var currentImage : Bitmap? = null
+    private var beforeImage : Bitmap? = null
+    private var afterImage : Bitmap? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,17 +82,38 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             runningFlag = true
             binding.overlay.markBasePosition()
             if(currentImage != null) {
-                beforeImage = currentImage
+                beforeImage = currentImage!!
             }
         } else if(runningFlag) {
-            binding.startStopButton.text = resources.getString(R.string.start)
             runningFlag = false
             if(currentImage != null) {
-                afterImage = currentImage
-                Navigation.findNavController(binding.root).navigate(R.id.navigateToRomResults)
+                afterImage = currentImage!!
+                navigateToROMScreen()
             }
         }
     }
+
+    private fun navigateToROMScreen() {
+        val action = CameraFragmentDirections.navigateToRomResults(beforeImage!!, afterImage!!, binding.overlay.rangeOfMotion.toString())
+        Navigation.findNavController(binding.root).navigate(action)
+    }
+
+    private fun convertImageToBitMap(image: Image): Bitmap {
+        val planes = image.planes
+        val buffer = planes[0].buffer
+        val pixelStride = planes[0].pixelStride
+        val rowStride = planes[0].rowStride
+        val rowPadding = rowStride - pixelStride * image.width
+
+        val bitmap = Bitmap.createBitmap(
+            image.width + rowPadding / pixelStride,
+            image.height,
+            Bitmap.Config.ARGB_8888
+        )
+        bitmap.copyPixelsFromBuffer(buffer)
+        return bitmap
+    }
+
 
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -181,11 +208,14 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 .setTargetRotation(binding.viewFinder.display.rotation)
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+
                 .build()
                 .also {
                     it.setAnalyzer(backgroundExecutor) {
-                        image -> detectPose(image)
-                        currentImage = image
+                        image ->
+                        saveImageFrame(image.toBitmap())
+                        detectPose(image)
+                        image.close()
                     }
                 }
         cameraProvider.unbindAll()
@@ -198,6 +228,10 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         } catch (exc: Exception) {
             Log.e(tag, "Use case binding failed", exc)
         }
+    }
+
+    @OptIn(ExperimentalGetImage::class) private fun saveImageFrame(frame: Bitmap) {
+        currentImage = frame
     }
 
     private fun detectPose(imageProxy: ImageProxy) {

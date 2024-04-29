@@ -147,8 +147,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         if(results!!.landmarks().size > 0) {
             val landmark = results!!.landmarks().first()
             val primary = landmark[primaryPoint!!]
-            positionLocked = (inRange(primary.x(), targetPoint.first, 0.03f)
-                    && inRange(primary.y(), targetPoint.second, 0.03f))
+            positionLocked = (inRange(primary.x(), targetPoint.first, 0.06f)
+                    && inRange(primary.y(), targetPoint.second, 0.06f))
         }
     }
 

@@ -28,14 +28,14 @@ class PoseIntroductionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPoseIntroductionBinding.inflate(inflater, container, false)
-        binding.heading.text = args.poseSelection
+        binding.poseIntroductionHeading.text = args.poseSelection
         binding.startVision.setOnClickListener {
             if(getPermission()) {
                 val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, !binding.leftRadio.isChecked)
                 Navigation.findNavController(binding.root).navigate(action)
             }
         }
-        when(binding.heading.text) {
+        when(args.poseSelection) {
             "Abduction" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.abduction))
             "Adduction" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.adduction))
             "External Rotation" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.external_rotation))
