@@ -15,9 +15,14 @@ class WelcomeFragment : Fragment() {
     private val binding get() = _binding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
-        _binding!!.registerButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToRegistration) }
+        setupButtons()
         return binding.root
     }
+
+    private fun setupButtons() {
+        _binding!!.registerButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToRegistration) }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

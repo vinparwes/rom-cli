@@ -3,10 +3,8 @@ package com.example.rom_cli.ui.fragment.vision
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.Image
-import android.media.MediaCodec
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,7 +28,6 @@ import com.example.rom_cli.R
 import com.example.rom_cli.data.PoseLandmarkerHelper
 import com.example.rom_cli.databinding.FragmentCameraBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
-import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -48,7 +45,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private var preview: Preview? = null
     private var imageAnalyzer : ImageAnalysis? = null
     private var cameraProvider: ProcessCameraProvider? = null
-    private var cameraFacing = CameraSelector.LENS_FACING_FRONT
+    private var cameraFacing = CameraSelector.LENS_FACING_BACK
 
     private var LEFT_SHOULDER_POINT: Int = 11
     private var RIGHT_SHOULDER_POINT: Int = 12
@@ -65,7 +62,8 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
     private var currentImage : Bitmap? = null
     private var beforeImage : Bitmap? = null
-    private var afterImage : Bitmap? = null
+    private var rotation : Int? = null
+    private var beforeRotation : Int? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -84,17 +82,29 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             if(currentImage != null) {
                 beforeImage = currentImage!!
             }
+            if(rotation != null) {
+                beforeRotation = rotation
+            }
         } else if(runningFlag) {
             runningFlag = false
             if(currentImage != null) {
-                afterImage = currentImage!!
-                navigateToROMScreen()
+                val afterImage = currentImage!!
+                val afterRotation : Int = rotation!!
+                navigateToROMScreen(afterImage, afterRotation)
             }
         }
     }
 
-    private fun navigateToROMScreen() {
-        val action = CameraFragmentDirections.navigateToRomResults(beforeImage!!, afterImage!!, binding.overlay.rangeOfMotion.toString())
+    private fun navigateToROMScreen(afterImage: Bitmap, afterRotation: Int) {
+        val action = CameraFragmentDirections.navigateToRomResults(
+            beforeImage!!,
+            afterImage,
+            binding.overlay.rangeOfMotion.toString(),
+            beforeRotation!!,
+            afterRotation,
+            args.poseName,
+            cameraFacing == CameraSelector.LENS_FACING_FRONT,
+            args.leftJoint)
         Navigation.findNavController(binding.root).navigate(action)
     }
 
@@ -213,7 +223,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 .also {
                     it.setAnalyzer(backgroundExecutor) {
                         image ->
-                        saveImageFrame(image.toBitmap())
+                        saveImageFrame(image.toBitmap(), image.imageInfo.rotationDegrees)
                         detectPose(image)
                         image.close()
                     }
@@ -230,8 +240,12 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         }
     }
 
-    @OptIn(ExperimentalGetImage::class) private fun saveImageFrame(frame: Bitmap) {
+    @OptIn(ExperimentalGetImage::class) private fun saveImageFrame(
+        frame: Bitmap,
+        rotationDegrees: Int
+    ) {
         currentImage = frame
+        rotation = rotationDegrees
     }
 
     private fun detectPose(imageProxy: ImageProxy) {

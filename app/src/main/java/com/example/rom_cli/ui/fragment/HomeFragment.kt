@@ -16,13 +16,15 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        setupButtons()
+        return binding.root
+    }
 
+    private fun setupButtons() {
         _binding!!.analysisButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToAnalysis) }
         _binding!!.profileButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToProfile) }
         _binding!!.statisticsButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToStatistics) }
         _binding!!.aboutButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToAbout) }
-
-        return binding.root
     }
 
 }

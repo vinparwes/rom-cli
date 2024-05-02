@@ -153,5 +153,23 @@
         <argument
             android:name="finalRom"
             app:argType="string" />
+        <argument
+            android:name="beforeRotation"
+            app:argType="integer" />
+        <argument
+            android:name="afterRotation"
+            app:argType="integer" />
+        <argument
+            android:name="poseSelection"
+            app:argType="string" />
+        <argument
+            android:name="recordedByFrontCamera"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/navigateFromRomResultsToCameraFragment"
+            app:destination="@id/cameraFragment" />
+        <argument
+            android:name="leftHandSide"
+            app:argType="boolean" />
     </fragment>
 </navigation>

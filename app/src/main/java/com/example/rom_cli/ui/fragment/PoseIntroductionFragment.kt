@@ -28,20 +28,29 @@ class PoseIntroductionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPoseIntroductionBinding.inflate(inflater, container, false)
+        setupButtons()
+        setupFields()
+        return binding.root
+    }
+
+    private fun setupFields() {
         binding.poseIntroductionHeading.text = args.poseSelection
-        binding.startVision.setOnClickListener {
-            if(getPermission()) {
-                val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, !binding.leftRadio.isChecked)
-                Navigation.findNavController(binding.root).navigate(action)
-            }
-        }
+
         when(args.poseSelection) {
             "Abduction" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.abduction))
             "Adduction" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.adduction))
             "External Rotation" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.external_rotation))
             "Forward Flexion" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.forward_flexion))
         }
-        return binding.root
+    }
+
+    private fun setupButtons() {
+        binding.startVision.setOnClickListener {
+            if(getPermission()) {
+                val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, !binding.leftRadio.isChecked)
+                Navigation.findNavController(binding.root).navigate(action)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

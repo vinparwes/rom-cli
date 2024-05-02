@@ -15,7 +15,11 @@ class ShoulderAnalysisFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentShoulderAnalysisBinding.inflate(inflater, container, false)
+        setupButtons()
+        return binding.root
+    }
 
+    private fun setupButtons() {
         _binding!!.forwardFlexionSelector.setOnClickListener {
             val action = ShoulderAnalysisFragmentDirections.navigateToPoseIntroduction("Forward Flexion")
             Navigation.findNavController(binding.root).navigate(action)
@@ -32,7 +36,6 @@ class ShoulderAnalysisFragment : Fragment() {
             val action = ShoulderAnalysisFragmentDirections.navigateToPoseIntroduction("External Rotation")
             Navigation.findNavController(binding.root).navigate(action)
         }
-        return binding.root
     }
 
 }

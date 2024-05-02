@@ -17,9 +17,13 @@ class AnalysisFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentAnalysisBinding.inflate(inflater, container, false)
+        setupButtons()
+        return binding.root
+    }
+
+    private fun setupButtons() {
         _binding!!.shoulderSelector.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToShoulderAnalysis) }
         _binding!!.kneeSelector.setOnClickListener { Toast.makeText(context, "Not yet implemented...", Toast.LENGTH_LONG).show() }
-        return binding.root
     }
 
 }

@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
@@ -17,8 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
-            android:text="Results"
+            android:text="Adduction Results"
             android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="34sp" />
 
         <TextView
@@ -27,11 +29,16 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:text="Placeholder"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="18dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ImageView
@@ -49,6 +56,31 @@
                 android:layout_weight="1"
 
                 />
+
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="18dp" />
+
+        <Button
+            android:id="@+id/romResultsSaveButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:text="Submit" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="18dp" />
+
+        <Button
+            android:id="@+id/romResultsBackButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:text="Try Again" />
     </LinearLayout>
 </FrameLayout>
