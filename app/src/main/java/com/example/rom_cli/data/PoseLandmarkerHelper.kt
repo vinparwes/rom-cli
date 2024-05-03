@@ -25,7 +25,6 @@ class PoseLandmarkerHelper(
     var currentDelegate: Int = DELEGATE_CPU,
     var runningMode: RunningMode = RunningMode.IMAGE,
     val context: Context,
-    // this listener is only used when running in RunningMode.LIVE_STREAM
     val poseLandmarkerHelperListener: LandmarkerListener? = null
 ) {
 

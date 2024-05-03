@@ -45,7 +45,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private var preview: Preview? = null
     private var imageAnalyzer : ImageAnalysis? = null
     private var cameraProvider: ProcessCameraProvider? = null
-    private var cameraFacing = CameraSelector.LENS_FACING_BACK
+    private var cameraFacing = CameraSelector.LENS_FACING_FRONT
 
     private var LEFT_SHOULDER_POINT: Int = 11
     private var RIGHT_SHOULDER_POINT: Int = 12

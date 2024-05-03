@@ -11,7 +11,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.example.rom_cli.data.FileController
+import com.example.rom_cli.data.RomSessionResult
+import com.example.rom_cli.data.Utility
 import com.example.rom_cli.databinding.FragmentRomResultsBinding
+import java.time.LocalDateTime
+import java.util.Date
 
 class RomResultsFragment : Fragment() {
 
@@ -28,7 +33,18 @@ class RomResultsFragment : Fragment() {
 
     private fun setupButtons() {
         binding.romResultsSaveButton.setOnClickListener {
-            Toast.makeText(context, "Not yet implemented...", Toast.LENGTH_SHORT).show()
+            val obj = RomSessionResult(
+                Utility.bitmapToByteArray(args.beforeImageBitMap),
+                Utility.bitmapToByteArray(args.afterImageBitMap),
+                args.finalRom.toInt(),
+                args.poseSelection
+            )
+            val fileName = LocalDateTime.now().toString() + "_${args.poseSelection}"
+            if(FileController.putObject(obj, requireContext(), fileName)) {
+                Toast.makeText(context, "Thing worked?1", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(context, "Thing didn't work?", Toast.LENGTH_LONG).show()
+            }
         }
         binding.romResultsBackButton.setOnClickListener {
             val action = RomResultsFragmentDirections.navigateFromRomResultsToCameraFragment(args.poseSelection, args.leftHandSide)
@@ -43,7 +59,6 @@ class RomResultsFragment : Fragment() {
         val afterRotation = args.afterRotation
         val beforeMatrix = Matrix().apply {
             postRotate(beforeRotation.toFloat())
-            /*
             if (args.recordedByFrontCamera) {
                 postScale(
                     -1f,
@@ -52,11 +67,9 @@ class RomResultsFragment : Fragment() {
                     beforeBitmap.height.toFloat()
                 )
             }
-             */
         }
         val afterMatrix = Matrix().apply {
             postRotate(afterRotation.toFloat())
-            /*
             if (args.recordedByFrontCamera) {
                 postScale(
                     -1f,
@@ -65,7 +78,6 @@ class RomResultsFragment : Fragment() {
                     afterBitmap.height.toFloat()
                 )
             }
-             */
         }
 
         val rotatedBeforeBitmap = Bitmap.createBitmap(
