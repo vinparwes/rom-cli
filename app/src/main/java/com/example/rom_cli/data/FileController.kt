@@ -12,21 +12,31 @@ import java.io.ObjectOutputStream
 class FileController {
 
     companion object {
-        fun get(context: Context, fileName : String) : File? {
+        fun getRomResult(context: Context, fileName : String) : RomSessionResult? {
+            val file = File(context.filesDir, fileName)
+            try {
+                val ois = ObjectInputStream(FileInputStream(file))
+                val obj = ois.readObject() as RomSessionResult
+                ois.close()
+                return obj
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: ClassNotFoundException) {
+                e.printStackTrace()
+            }
             return null
         }
 
         fun getRomResults(context: Context) : List<RomSessionResult>? {
             val fileList = context.fileList()
-            fileList.forEach {
-                Log.i("INFO", it)
-            }
             val files : MutableList<String> = ArrayList()
             for (string in fileList) {
                 files.add(string)
             }
             files.removeFirst()
-            //TODO Need to skip profileInstalled
+            //TODO(Need to disregard the file profileinstalled. Possible through foldering?)
 
             val list : MutableList<RomSessionResult> = ArrayList()
             for (fileName in files) {
@@ -46,6 +56,7 @@ class FileController {
             }
             return list
         }
+
 
         fun delete(context: Context, fileName: String) : File? {
             return null;

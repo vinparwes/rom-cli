@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.marginLeft
+import androidx.navigation.Navigation
 import com.example.rom_cli.R
 import com.example.rom_cli.data.FileController
 import com.example.rom_cli.data.RomSessionResult
@@ -44,16 +45,24 @@ class StatisticsFragment : Fragment() {
     }
     private fun setUpButtons() {
         val container = binding.statisticsButtonContainer
-        val context = requireContext()
+        val sb : StringBuilder = StringBuilder()
         for(romResult in romResults!!) {
-            val button = Button(context)
-            button.setTextAppearance(R.style.statisticsFragmentButtonText)
-            button.setBackgroundResource(R.drawable.custom_button)
-            button.text = "${romResult.poseIdentifier} ${romResult.recordedROM}"
-            button.setOnClickListener {
-                Log.i("HEYEY", romResult.recordedROM.toString())
+            val view : View = layoutInflater.inflate(R.layout.card_holder, null)
+            val dateView = view.findViewById<TextView>(R.id.cardHolderDateView)
+            val poseView = view.findViewById<TextView>(R.id.cardHolderPoseView)
+            val romView = view.findViewById<TextView>(R.id.cardHolderRomView)
+            dateView.text = romResult.dateRecorded
+            poseView.text = romResult.poseIdentifier
+            romView.text = romResult.recordedROM.toString()
+
+            val selectButton = view.findViewById<Button>(R.id.romSessionEnterButton)
+            selectButton.setOnClickListener {
+                sb.append(romResult.dateRecorded).append("_").append(romResult.poseIdentifier)
+                val action = StatisticsFragmentDirections.navigateFromStatisticsToRomHistory(sb.toString())
+                Navigation.findNavController(binding.root).navigate(action)
             }
-            container.addView(button)
+            sb.clear()
+            container.addView(view)
         }
     }
 }

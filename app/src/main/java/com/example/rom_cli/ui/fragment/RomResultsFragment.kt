@@ -15,7 +15,10 @@ import com.example.rom_cli.data.FileController
 import com.example.rom_cli.data.RomSessionResult
 import com.example.rom_cli.data.Utility
 import com.example.rom_cli.databinding.FragmentRomResultsBinding
+import com.google.common.flogger.parameter.DateTimeFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 class RomResultsFragment : Fragment() {
@@ -33,17 +36,20 @@ class RomResultsFragment : Fragment() {
 
     private fun setupButtons() {
         binding.romResultsSaveButton.setOnClickListener {
+            val dateFormatted = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             val obj = RomSessionResult(
+                dateFormatted,
                 Utility.bitmapToByteArray(args.beforeImageBitMap),
                 Utility.bitmapToByteArray(args.afterImageBitMap),
                 args.finalRom.toInt(),
                 args.poseSelection
             )
-            val fileName = LocalDateTime.now().toString() + "_${args.poseSelection}"
+            val fileName = dateFormatted + "_${args.poseSelection}"
             if(FileController.putObject(obj, requireContext(), fileName)) {
-                Toast.makeText(context, "Thing worked?1", Toast.LENGTH_LONG).show()
+                val action = RomResultsFragmentDirections.navigateFromRomResultsToHomeFragment(true)
+                Navigation.findNavController(binding.root).navigate(action)
             } else {
-                Toast.makeText(context, "Thing didn't work?", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Something went wrong..", Toast.LENGTH_LONG).show()
             }
         }
         binding.romResultsBackButton.setOnClickListener {

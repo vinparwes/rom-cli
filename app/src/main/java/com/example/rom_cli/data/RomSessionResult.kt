@@ -4,11 +4,12 @@ import android.graphics.Bitmap
 import java.io.ByteArrayOutputStream
 import java.io.Serializable
 
-class RomSessionResult(beforeImage : ByteArray,
+class RomSessionResult(dateRecorded: String,
+                       beforeImage : ByteArray,
                        afterImage : ByteArray,
                        recordedROM : Int,
                        poseIdentifier : String) : Serializable {
-
+    val dateRecorded = dateRecorded
     val beforeImage = beforeImage
     val afterImage = afterImage
     val recordedROM = recordedROM

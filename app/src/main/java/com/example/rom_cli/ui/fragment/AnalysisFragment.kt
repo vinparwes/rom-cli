@@ -14,6 +14,7 @@ class AnalysisFragment : Fragment() {
 
     private var _binding : FragmentAnalysisBinding? = null
     private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentAnalysisBinding.inflate(inflater, container, false)
         setupButtons()

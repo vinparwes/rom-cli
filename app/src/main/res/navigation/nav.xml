@@ -25,6 +25,10 @@
             android:id="@+id/navigateToAbout"
             app:destination="@id/aboutFragment"
             app:enterAnim="@android:anim/fade_in" />
+        <argument
+            android:name="romRecorded"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -79,6 +83,9 @@
             android:id="@+id/action_statisticsFragment_to_homeFragment"
             app:destination="@id/homeFragment"
             app:enterAnim="@android:anim/fade_in" />
+        <action
+            android:id="@+id/navigateFromStatisticsToRomHistory"
+            app:destination="@id/romHistoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/analysisFragment"
@@ -171,5 +178,17 @@
         <argument
             android:name="leftHandSide"
             app:argType="boolean" />
+        <action
+            android:id="@+id/navigateFromRomResultsToHomeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/romHistoryFragment"
+        android:name="com.example.rom_cli.ui.fragment.RomHistoryFragment"
+        android:label="fragment_rom_history"
+        tools:layout="@layout/fragment_rom_history" >
+        <argument
+            android:name="fileKey"
+            app:argType="string" />
     </fragment>
 </navigation>
