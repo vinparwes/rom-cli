@@ -3,6 +3,7 @@ package com.example.rom_cli.ui.fragment
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +67,9 @@ class PoseIntroductionFragment : Fragment() {
 
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
-            requireActivity(), arrayOf(Manifest.permission.CAMERA),
+            requireActivity(), arrayOf(
+                Manifest.permission.CAMERA
+            ),
             PERMISSION_REQUEST_CODE
         )
     }
@@ -76,6 +79,7 @@ class PoseIntroductionFragment : Fragment() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        Log.i("PERMISSION RESULT", permissions.toString())
         when (requestCode) {
             PERMISSION_REQUEST_CODE -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_SHORT)

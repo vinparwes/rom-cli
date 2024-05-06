@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,43 +11,122 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/romHistoryTextHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="External Rotation"
+            android:textAlignment="center"
+            android:textSize="45dp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/romHistoryImageExample"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
+            app:shapeAppearanceOverlay="@style/poseIntroductionContainer"
+            tools:src="@tools:sample/avatars"
+            />
+        <TextView
             android:id="@+id/romHistoryTextDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/hello_blank_fragment"
-            android:textSize="30dp" />
+            android:layout_marginTop="10dp"
+            android:text="2024-02-16"
+            android:textAlignment="center"
+            android:textSize="35dp" />
 
-        <TextView
-            android:id="@+id/romHistoryTextRom"
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?android:attr/listDivider" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="30dp" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/romHistoryTextStart"
+            <ImageView
+                android:id="@+id/romHistoryImageBefore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+
+            <ImageView
+                android:id="@+id/romHistoryImageAfter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="30dp" />
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="?android:attr/listDivider" />
 
         <TextView
             android:id="@+id/textView11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="30dp" />
+            android:text="ROM Recorded"
+            android:textAlignment="center"
+            android:textSize="35dp" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/romHistoryTextRom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="180 Degrees"
+            android:textAlignment="center"
             android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/romHistoryButtonDownload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="60dp"
+            android:text="Download Images" />
+
+        <Button
+            android:id="@+id/romHistoryButtonDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="60dp"
+            android:text="Delete Entry" />
+
+        <Button
+            android:id="@+id/romHistoryButtonBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="60dp"
+            android:text="Back" />
     </LinearLayout>
 
 </FrameLayout>

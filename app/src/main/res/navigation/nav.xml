@@ -190,5 +190,9 @@
         <argument
             android:name="fileKey"
             app:argType="string" />
+        <action
+            android:id="@+id/navigateFromRomHistoryToRomStatistics"
+            app:destination="@id/statisticsFragment"
+            />
     </fragment>
 </navigation>

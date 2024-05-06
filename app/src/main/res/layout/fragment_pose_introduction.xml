@@ -32,7 +32,8 @@
             android:layout_marginBottom="10dp"
             android:background="@color/white"
             app:shapeAppearanceOverlay="@style/poseIntroductionContainer"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/avatars"
+            />
 
         <TextView
             android:id="@+id/textView6"

@@ -27,6 +27,9 @@ class RomResultsFragment : Fragment() {
     private val args: RomResultsFragmentArgs by navArgs()
     private val binding get() = _binding!!
 
+    private var bitmapBefore : Bitmap? = null
+    private var bitmapAfter : Bitmap? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentRomResultsBinding.inflate(inflater, container, false)
         setupFields()
@@ -39,8 +42,8 @@ class RomResultsFragment : Fragment() {
             val dateFormatted = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             val obj = RomSessionResult(
                 dateFormatted,
-                Utility.bitmapToByteArray(args.beforeImageBitMap),
-                Utility.bitmapToByteArray(args.afterImageBitMap),
+                Utility.bitmapToByteArray(bitmapBefore!!),
+                Utility.bitmapToByteArray(bitmapAfter!!),
                 args.finalRom.toInt(),
                 args.poseSelection
             )
@@ -94,9 +97,10 @@ class RomResultsFragment : Fragment() {
             afterBitmap, 0, 0, afterBitmap.width, afterBitmap.height,
             afterMatrix, true
         )
-
-        binding.beforeImageView.setImageDrawable(BitmapDrawable(resources, rotatedBeforeBitmap))
-        binding.afterImageView.setImageDrawable(BitmapDrawable(resources, rotatedAfterBitmap))
+        bitmapBefore = rotatedBeforeBitmap
+        bitmapAfter = rotatedAfterBitmap
+        binding.beforeImageView.setImageDrawable(BitmapDrawable(resources, bitmapBefore))
+        binding.afterImageView.setImageDrawable(BitmapDrawable(resources, bitmapAfter))
         binding.romResultsHeading.text = "${args.poseSelection} Results"
         binding.romResultText.text = args.finalRom
     }
