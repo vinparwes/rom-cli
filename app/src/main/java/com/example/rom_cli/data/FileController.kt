@@ -1,8 +1,11 @@
 package com.example.rom_cli.data
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.media.MediaScannerConnection
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import java.io.File
 import java.io.FileInputStream
@@ -84,35 +87,27 @@ class FileController {
             }
         }
 
-        fun saveImageToStorage(context: Context, image: Bitmap, fileName: String): Boolean {
-            Log.i("FILE_CONTROLLER", "@")
-            if (PermissionsController.checkStoragePermission(context)) {
-                var outputStream: OutputStream? = null
-                try {
-                    val folder = File(
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                        "rom-cli"
-                    )
-                    if (!folder.exists()) {
-                        folder.mkdirs()
-                    }
-                    val file = File(folder, fileName)
-                    outputStream = FileOutputStream(file)
-                    image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                    outputStream.flush()
-                    outputStream.close()
-                    return true
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                } finally {
-                    try {
-                        outputStream?.close()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
+        fun saveImageToGallery(context: Context, bitmap: Bitmap, title: String) : Boolean {
+            val imagesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            val image = File(imagesDir, "$title.jpg")
+            if(saveBitmapToFile(bitmap, image)) {
+                MediaScannerConnection.scanFile(context, arrayOf(image.toString()), arrayOf("image/jpeg"), null)
+                return true
             }
             return false
+        }
+
+        private fun saveBitmapToFile(bitmap: Bitmap, imageFile: File) : Boolean {
+            return try {
+                imageFile.createNewFile()
+                val outputStream: OutputStream = FileOutputStream(imageFile)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                outputStream.flush()
+                outputStream.close()
+                true
+            } catch (e: Exception) {
+                false
+            }
         }
     }
 }

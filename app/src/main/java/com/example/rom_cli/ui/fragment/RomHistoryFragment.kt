@@ -1,15 +1,17 @@
 package com.example.rom_cli.ui.fragment
 
+import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.R
@@ -22,8 +24,6 @@ import com.example.rom_cli.databinding.FragmentRomHistoryBinding
 
 class RomHistoryFragment : Fragment() {
 
-    private val STORAGE_PERMISSION_REQUEST_CODE = 100
-
     private var _binding : FragmentRomHistoryBinding? = null
     private val binding get() = _binding!!
     private val args: RomHistoryFragmentArgs by navArgs()
@@ -32,21 +32,22 @@ class RomHistoryFragment : Fragment() {
     private var bitmapBefore : Bitmap? = null
     private var bitmapAfter : Bitmap? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentRomHistoryBinding.inflate(inflater, container, false)
+        romSession = FileController.getRomResult(requireContext(), args.fileKey)
+        setupFields()
+        setupImages()
+        setupButtons()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        romSession = FileController.getRomResult(requireContext(), args.fileKey)
-        setupFields()
-        setupImages()
-        setupButtons()
+        PermissionsController.requestPermission(
+            requireActivity(),
+            PermissionsController.storagePermissionRequestCode,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        )
     }
 
     private fun setupFields() {
@@ -71,19 +72,21 @@ class RomHistoryFragment : Fragment() {
 
     private fun setupButtons() {
         binding.romHistoryButtonDownload.setOnClickListener {
-            if(!PermissionsController.checkStoragePermission(requireContext())) {
-                Log.i("INFO", "CHECKING STORAGE PERMISSIONS")
-                PermissionsController.requestStoragePermission(requireActivity(), STORAGE_PERMISSION_REQUEST_CODE)
+            if(
+                FileController.saveImageToGallery(
+                    requireContext(),
+                    bitmapBefore!!,
+                    args.fileKey + "_before")
+                &&
+                FileController.saveImageToGallery(
+                    requireContext(),
+                    bitmapAfter!!,
+                    args.fileKey + "_after",
+                ))
+            {
+                Toast.makeText(requireContext(), "Images saved to local directory", Toast.LENGTH_LONG)
             } else {
-                Log.i("INFO", "STORAGE PERMISSIONS GRANTED?")
-                if(
-                    FileController.saveImageToStorage(requireContext(), bitmapBefore!!, args.fileKey + "_before") &&
-                    FileController.saveImageToStorage(requireContext(), bitmapBefore!!, args.fileKey + "_after")
-                ) {
-                    Toast.makeText(requireContext(),"Images saved!", Toast.LENGTH_LONG).show()
-                } else {
-                    Toast.makeText(requireContext(),"Something went wrong", Toast.LENGTH_LONG).show()
-                }
+                Toast.makeText(requireContext(), "Couldn't save images", Toast.LENGTH_LONG)
             }
         }
         binding.romHistoryButtonDelete.setOnClickListener {
@@ -94,7 +97,8 @@ class RomHistoryFragment : Fragment() {
             Navigation.findNavController(binding.root).navigate(R.id.navigateFromRomHistoryToRomStatistics)
         }
     }
-    /*
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -102,7 +106,7 @@ class RomHistoryFragment : Fragment() {
     ) {
         Log.i("PERMISSION RESULT", permissions.toString())
         when (requestCode) {
-            STORAGE_PERMISSION_REQUEST_CODE -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            PermissionsController.storagePermissionRequestCode -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_SHORT)
                     .show()
             } else {
@@ -111,5 +115,4 @@ class RomHistoryFragment : Fragment() {
             }
         }
     }
-     */
 }
