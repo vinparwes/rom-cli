@@ -1,12 +1,9 @@
 package com.example.rom_cli.data
 
-import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.os.Environment
-import android.provider.MediaStore
-import android.util.Log
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException

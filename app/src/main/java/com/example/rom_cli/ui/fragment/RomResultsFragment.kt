@@ -15,11 +15,8 @@ import com.example.rom_cli.data.FileController
 import com.example.rom_cli.data.RomSessionResult
 import com.example.rom_cli.data.Utility
 import com.example.rom_cli.databinding.FragmentRomResultsBinding
-import com.google.common.flogger.parameter.DateTimeFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
 
 class RomResultsFragment : Fragment() {
 
@@ -40,6 +37,7 @@ class RomResultsFragment : Fragment() {
     private fun setupButtons() {
         binding.romResultsSaveButton.setOnClickListener {
             val dateFormatted = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
             val obj = RomSessionResult(
                 dateFormatted,
                 Utility.bitmapToByteArray(bitmapBefore!!),

@@ -1,4 +1,5 @@
 package com.example.rom_cli.data
+
 enum class ShoulderPose(primary: LandmarkSelector, secondary: LandmarkSelector) {
 
     LeftAbduction(LandmarkSelector.LEFT_SHOULDER_POINT, LandmarkSelector.LEFT_ELBOW_POINT),

@@ -1,7 +1,6 @@
 package com.example.rom_cli.ui.fragment
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -20,7 +19,6 @@ import com.example.rom_cli.data.PermissionsController
 import com.example.rom_cli.data.RomSessionResult
 import com.example.rom_cli.data.Utility
 import com.example.rom_cli.databinding.FragmentRomHistoryBinding
-
 
 class RomHistoryFragment : Fragment() {
 

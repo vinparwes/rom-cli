@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,7 +29,6 @@ import com.example.rom_cli.databinding.FragmentCameraBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
 
 class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
@@ -108,22 +106,6 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         Navigation.findNavController(binding.root).navigate(action)
     }
 
-    private fun convertImageToBitMap(image: Image): Bitmap {
-        val planes = image.planes
-        val buffer = planes[0].buffer
-        val pixelStride = planes[0].pixelStride
-        val rowStride = planes[0].rowStride
-        val rowPadding = rowStride - pixelStride * image.width
-
-        val bitmap = Bitmap.createBitmap(
-            image.width + rowPadding / pixelStride,
-            image.height,
-            Bitmap.Config.ARGB_8888
-        )
-        bitmap.copyPixelsFromBuffer(buffer)
-        return bitmap
-    }
-
 
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -165,7 +147,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                     overlayView.secondPoint = LEFT_WRIST_POINT
                 }
                 "Forward Flexion" -> {
-                    overlayView.primaryPoint = LEFT_ELBOW_POINT
+                    overlayView.primaryPoint = LEFT_SHOULDER_POINT
                     overlayView.secondPoint = LEFT_WRIST_POINT
                 }
             }
@@ -184,8 +166,8 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                     overlayView.secondPoint = RIGHT_WRIST_POINT
                 }
                 "Forward Flexion" -> {
-                    overlayView.primaryPoint = RIGHT_HAND_BASE_POINT
-                    overlayView.secondPoint = RIGHT_ELBOW_POINT
+                    overlayView.primaryPoint = RIGHT_SHOULDER_POINT
+                    overlayView.secondPoint = RIGHT_WRIST_POINT
                 }
             }
         }

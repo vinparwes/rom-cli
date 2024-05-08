@@ -3,7 +3,6 @@ package com.example.rom_cli.ui.fragment
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +37,12 @@ class PoseIntroductionFragment : Fragment() {
             "Adduction" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.adduction))
             "External Rotation" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.external_rotation))
             "Forward Flexion" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.forward_flexion))
+        }
+        when(args.poseSelection) {
+            "Abduction" -> binding.poseIntroductionExplanation.text = resources.getText(R.string.instruction_abduction)
+            "Adduction" -> binding.poseIntroductionExplanation.text = resources.getText(R.string.instruction_adduction)
+            "External Rotation" -> binding.poseIntroductionExplanation.text = resources.getText(R.string.instruction_external_rotation)
+            "Forward Flexion" -> binding.poseIntroductionExplanation.text = resources.getText(R.string.instruction_forward_flexion)
         }
     }
 
