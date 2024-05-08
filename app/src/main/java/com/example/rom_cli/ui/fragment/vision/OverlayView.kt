@@ -17,6 +17,7 @@ import kotlin.math.sqrt
 
 class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
+
     private var results: PoseLandmarkerResult? = null
     private var primaryPointPaint = Paint()
     private var pointPaint = Paint()
@@ -29,6 +30,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
 
     var primaryPoint: Int? = null
     var secondPoint: Int? = null
+    var thirdPoint: Int? = null
     private var basePoint: Pair<Float, Float>? = null
     var rangeOfMotion: Int? = null
 
@@ -80,23 +82,34 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                 canvas.drawCircle(
                     startingPoint.x() * imageWidth * scaleFactor,
                     startingPoint.y() * imageHeight * scaleFactor,
-                    0.05f * 375,
+                    LANDMARK_CIRCLE_RADIUS,
                     primaryPointPaint
                 )
                 canvas.drawCircle(
                     secondPoint.x() * imageWidth * scaleFactor,
                     secondPoint.y() * imageHeight * scaleFactor,
-                    0.05f * 375,
+                    LANDMARK_CIRCLE_RADIUS,
                     pointPaint
                 )
                 if(basePoint != null) {
-                    canvas.drawCircle(
-                        basePoint!!.first * imageWidth * scaleFactor,
-                        basePoint!!.second * imageHeight * scaleFactor,
-                        0.05f * 375,
-                        primaryPointPaint
-                    )
-                    rangeOfMotion = getAngle(startingPoint, secondPoint, basePoint!!).toInt()
+                    if(thirdPoint != null) {
+                        val optional = landmark[thirdPoint!!]
+                        canvas.drawCircle(
+                            optional.x() * imageWidth * scaleFactor,
+                            optional.y() * imageHeight * scaleFactor,
+                            LANDMARK_CIRCLE_RADIUS,
+                            primaryPointPaint
+                        )
+                        rangeOfMotion = getAngle(startingPoint, secondPoint, Pair(optional.x(), optional.y())).toInt()
+                    } else {
+                        canvas.drawCircle(
+                            basePoint!!.first * imageWidth * scaleFactor,
+                            basePoint!!.second * imageHeight * scaleFactor,
+                            LANDMARK_CIRCLE_RADIUS,
+                            primaryPointPaint
+                        )
+                        rangeOfMotion = getAngle(startingPoint, secondPoint, basePoint!!).toInt()
+                    }
                 }
             }
         }
@@ -192,5 +205,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     }
     companion object {
         private const val LANDMARK_STROKE_WIDTH = 5F
+        private const val LANDMARK_CIRCLE_RADIUS = 0.05f * 375
+        var thirdPoint : Int? = null
     }
 }

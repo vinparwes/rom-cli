@@ -149,6 +149,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 "Forward Flexion" -> {
                     overlayView.primaryPoint = LEFT_SHOULDER_POINT
                     overlayView.secondPoint = LEFT_WRIST_POINT
+                    overlayView.thirdPoint = RIGHT_WRIST_POINT
                 }
             }
         } else {
@@ -168,6 +169,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 "Forward Flexion" -> {
                     overlayView.primaryPoint = RIGHT_SHOULDER_POINT
                     overlayView.secondPoint = RIGHT_WRIST_POINT
+                    overlayView.thirdPoint = LEFT_WRIST_POINT
                 }
             }
         }
