@@ -45,6 +45,21 @@
             app:strokeColor="#FFFFFF"
             app:strokeWidth="3dp" />
 
+        <ImageButton
+            android:id="@+id/switchCameraButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/round_button"
+            android:src="@drawable/rotate_cw"
+            app:circularflow_radiusInDP="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:strokeColor="#FFFFFF"
+            app:strokeWidth="1dp" />
+
         <com.example.rom_cli.ui.fragment.vision.OverlayView
             android:id="@+id/overlay"
             android:layout_width="match_parent"

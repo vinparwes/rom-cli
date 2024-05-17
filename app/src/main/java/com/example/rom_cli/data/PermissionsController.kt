@@ -1,6 +1,5 @@
 package com.example.rom_cli.data
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
@@ -15,7 +14,6 @@ class PermissionsController {
         val storagePermissionRequestCode = 100
 
         fun requestPermission(activity: Activity, requestCode: Int, permission: String) {
-            Log.i("INFO", "REQUESTING PERMISSION: $permission")
             ActivityCompat.requestPermissions(
                 activity,
                 arrayOf(permission),

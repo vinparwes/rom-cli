@@ -43,16 +43,12 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private var preview: Preview? = null
     private var imageAnalyzer : ImageAnalysis? = null
     private var cameraProvider: ProcessCameraProvider? = null
-    private var cameraFacing = CameraSelector.LENS_FACING_BACK
+    private var cameraFacing = CameraSelector.LENS_FACING_FRONT
 
     private var LEFT_SHOULDER_POINT: Int = 11
     private var RIGHT_SHOULDER_POINT: Int = 12
     private var LEFT_ELBOW_POINT: Int = 13
     private var RIGHT_ELBOW_POINT: Int = 14
-    private var LEFT_HAND_BASE_POINT: Int = 15
-    private var RIGHT_HAND_BASE_POINT: Int = 16
-    private var LEFT_WAIST_POINT: Int = 23
-    private var RIGHT_WAIST_POINT: Int = 24
     private var LEFT_WRIST_POINT: Int = 15
     private var RIGHT_WRIST_POINT: Int = 16
 
@@ -62,6 +58,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private var beforeImage : Bitmap? = null
     private var rotation : Int? = null
     private var beforeRotation : Int? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,7 +66,21 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
         binding.startStopButton.setOnClickListener { toggleRecording() }
         binding.startStopButton.isClickable = false
+        binding.switchCameraButton.setOnClickListener{ switchCamera() }
         return binding.root
+    }
+
+    private fun switchCamera() : Int {
+        if(cameraFacing == CameraSelector.LENS_FACING_FRONT) {
+            cameraFacing = CameraSelector.LENS_FACING_BACK
+            setUpCamera()
+            return 1
+        } else if(cameraFacing == CameraSelector.LENS_FACING_BACK){
+            cameraFacing = CameraSelector.LENS_FACING_FRONT
+            setUpCamera()
+            return 0
+        }
+        return 42
     }
 
     private fun toggleRecording() {
@@ -77,6 +88,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             binding.startStopButton.text = resources.getString(R.string.stop)
             runningFlag = true
             binding.overlay.markBasePosition()
+
             if(currentImage != null) {
                 beforeImage = currentImage!!
             }
@@ -132,22 +144,25 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     }
 
     private fun assignPoseMarkings(overlayView: OverlayView, poseName: String) {
+        Log.i("INFO", "SETTING leftHandRecording TO: ${!args.leftJoint}")
+        binding.overlay.leftHandRecording = !args.leftJoint
+        Log.i("INFO", "OVERLAY leftHandRecording IS: ${binding.overlay.leftHandRecording}")
         if(args.leftJoint) {
             when(poseName) {
                 "Abduction" -> {
-                    overlayView.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView.originPoint = LEFT_SHOULDER_POINT
                     overlayView.secondPoint = LEFT_ELBOW_POINT
                 }
                 "Adduction" -> {
-                    overlayView.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView.originPoint = LEFT_SHOULDER_POINT
                     overlayView.secondPoint = LEFT_WRIST_POINT
                 }
                 "External Rotation" -> {
-                    overlayView.primaryPoint = LEFT_ELBOW_POINT
+                    overlayView.originPoint = LEFT_ELBOW_POINT
                     overlayView.secondPoint = LEFT_WRIST_POINT
                 }
                 "Forward Flexion" -> {
-                    overlayView.primaryPoint = LEFT_SHOULDER_POINT
+                    overlayView.originPoint = LEFT_SHOULDER_POINT
                     overlayView.secondPoint = LEFT_WRIST_POINT
                     overlayView.thirdPoint = RIGHT_WRIST_POINT
                 }
@@ -155,19 +170,19 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         } else {
             when(poseName) {
                 "Abduction" -> {
-                    overlayView.primaryPoint = RIGHT_SHOULDER_POINT
+                    overlayView.originPoint = RIGHT_SHOULDER_POINT
                     overlayView.secondPoint = RIGHT_ELBOW_POINT
                 }
                 "Adduction" -> {
-                    overlayView.primaryPoint = RIGHT_SHOULDER_POINT
+                    overlayView.originPoint = RIGHT_SHOULDER_POINT
                     overlayView.secondPoint = RIGHT_WRIST_POINT
                 }
                 "External Rotation" -> {
-                    overlayView.primaryPoint = RIGHT_ELBOW_POINT
+                    overlayView.originPoint = RIGHT_ELBOW_POINT
                     overlayView.secondPoint = RIGHT_WRIST_POINT
                 }
                 "Forward Flexion" -> {
-                    overlayView.primaryPoint = RIGHT_SHOULDER_POINT
+                    overlayView.originPoint = RIGHT_SHOULDER_POINT
                     overlayView.secondPoint = RIGHT_WRIST_POINT
                     overlayView.thirdPoint = LEFT_WRIST_POINT
                 }
@@ -272,6 +287,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                         binding.startStopButton.isClickable = false
                     }
                 } else {
+                    binding.cameraLayout.setBackgroundColor(Color.GREEN)
                     if(binding.overlay.rangeOfMotion != null)
                         binding.instructionView.text = binding.overlay.rangeOfMotion.toString()
                 }

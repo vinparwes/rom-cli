@@ -8,6 +8,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -51,7 +55,7 @@
 
             <TextView
                 android:id="@+id/poseHeader"
-                android:layout_width="143dp"
+                android:layout_width="122dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
@@ -65,18 +69,19 @@
                 android:gravity="center_horizontal"
                 android:text="ROM" />
 
-            <TextView
-                android:id="@+id/textView18"
-                android:layout_width="99dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
         </LinearLayout>
 
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="535dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:fadeScrollbars="true"
+            android:isScrollContainer="true"
+            android:scrollbars="vertical">
 
             <LinearLayout
                 android:id="@+id/statisticsButtonContainer"
@@ -84,6 +89,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
         </ScrollView>
+
+        <Button
+            android:id="@+id/statisticsBackButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:text="Back" />
+
     </LinearLayout>
 
 </FrameLayout>

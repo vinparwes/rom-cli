@@ -17,6 +17,7 @@ import com.example.rom_cli.data.Utility
 import com.example.rom_cli.databinding.FragmentRomResultsBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 class RomResultsFragment : Fragment() {
 
@@ -37,7 +38,7 @@ class RomResultsFragment : Fragment() {
     private fun setupButtons() {
         binding.romResultsSaveButton.setOnClickListener {
             val dateFormatted = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-
+            val dateTimeHash = UUID.randomUUID().toString()
             val obj = RomSessionResult(
                 dateFormatted,
                 Utility.bitmapToByteArray(bitmapBefore!!),
@@ -45,8 +46,7 @@ class RomResultsFragment : Fragment() {
                 args.finalRom.toInt(),
                 args.poseSelection
             )
-            val fileName = dateFormatted + "_${args.poseSelection}"
-            if(FileController.putObject(obj, requireContext(), fileName)) {
+            if(FileController.putObject(obj, requireContext(), dateTimeHash)) {
                 val action = RomResultsFragmentDirections.navigateFromRomResultsToHomeFragment(true)
                 Navigation.findNavController(binding.root).navigate(action)
             } else {

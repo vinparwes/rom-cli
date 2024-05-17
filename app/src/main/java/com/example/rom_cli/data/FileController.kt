@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.os.Environment
+import android.util.Log
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -43,9 +44,10 @@ class FileController {
                 return null
             }
             files.removeFirst()
-            //TODO(Need to disregard the file profileinstalled. Possible through foldering?)
+            // TODO(Need to disregard the file profileinstalled. Possible through foldering?)
 
             val list : MutableList<RomSessionResult> = ArrayList()
+
             for (fileName in files) {
                 val file = File(context.filesDir, fileName)
                 try {
