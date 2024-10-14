@@ -18,6 +18,7 @@ class FileController {
 
     companion object {
         fun getRomResult(context: Context, fileName : String) : RomSessionResult? {
+            
             val file = File(context.filesDir, fileName)
             try {
                 val ois = ObjectInputStream(FileInputStream(file))
@@ -44,7 +45,7 @@ class FileController {
                 return null
             }
             files.removeFirst()
-            // TODO(Need to disregard the file profileinstalled. Possible through foldering?)
+            // TODO(Should disregard the file profileinstalled. Possible through foldering?)
 
             val list : MutableList<RomSessionResult> = ArrayList()
 

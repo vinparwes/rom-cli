@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark
 import com.google.mediapipe.tasks.vision.core.RunningMode
@@ -25,12 +24,15 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     private var pointPaint = Paint()
     private var linePaint = Paint()
     private var targetPointPaint = Paint()
+
     private var scaleFactor: Float = 1f
     private var imageWidth: Int = 1
     private var imageHeight: Int = 1
     private var targetPoint: Pair<Float, Float> = Pair(0.33f, 0.5f)
 
     private var basePoint: Pair<Float, Float>? = null
+
+    var externalRotation : Boolean = false
 
     var originPoint: Int? = null
     var secondPoint: Int? = null
@@ -80,12 +82,12 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         )
         results?.let { poseLandmarkerResult ->
             for(landmark in poseLandmarkerResult.landmarks()) {
-                val startingPoint = landmark[originPoint!!]
+                val origin = landmark[originPoint!!]
                 val secondPoint = landmark[secondPoint!!]
 
                 canvas.drawCircle(
-                    startingPoint.x() * imageWidth * scaleFactor,
-                    startingPoint.y() * imageHeight * scaleFactor,
+                    origin.x() * imageWidth * scaleFactor,
+                    origin.y() * imageHeight * scaleFactor,
                     LANDMARK_CIRCLE_RADIUS,
                     primaryPointPaint
                 )
@@ -95,6 +97,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                     LANDMARK_CIRCLE_RADIUS,
                     pointPaint
                 )
+
                 if(basePoint != null) {
                     if(thirdPoint != null) {
                         val optional = landmark[thirdPoint!!]
@@ -104,7 +107,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                             LANDMARK_CIRCLE_RADIUS,
                             primaryPointPaint
                         )
-                        rangeOfMotion = calculateAngle(startingPoint, secondPoint, Pair(optional.x(), optional.y())).toInt()
+                        rangeOfMotion = calculateAngle(origin, secondPoint, Pair(optional.x(), optional.y())).toInt()
                     } else {
                         canvas.drawCircle(
                             basePoint!!.first * imageWidth * scaleFactor,
@@ -112,7 +115,10 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                             LANDMARK_CIRCLE_RADIUS,
                             primaryPointPaint
                         )
-                        rangeOfMotion = calculateAngle(startingPoint, secondPoint, basePoint!!).toInt()
+                        rangeOfMotion = calculateAngle(origin, secondPoint, basePoint!!).toInt()
+                        if(externalRotation) {
+                            rangeOfMotion = 360 - rangeOfMotion!!
+                        }
                     }
                 }
             }
@@ -133,6 +139,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         val dotProduct = adjustedBX * adjustedCX + adjustedBY * adjustedCY
         val magnitudeOB = sqrt((adjustedBX * adjustedBX + adjustedBY * adjustedBY))
         val magnitudeOC = sqrt((adjustedCX * adjustedCX + adjustedCY * adjustedCY))
+
         var angleInRadians = acos(dotProduct / (magnitudeOB * magnitudeOC))
 
         val crossProduct = adjustedBX * adjustedCY - adjustedBY * adjustedCX

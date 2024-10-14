@@ -15,4 +15,8 @@ class MainActivity : AppCompatActivity() {
         animationDrawable.setExitFadeDuration(5000)
         animationDrawable.start()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 }

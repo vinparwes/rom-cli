@@ -160,6 +160,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 "External Rotation" -> {
                     overlayView.originPoint = LEFT_ELBOW_POINT
                     overlayView.secondPoint = LEFT_WRIST_POINT
+                    overlayView.externalRotation = true
                 }
                 "Forward Flexion" -> {
                     overlayView.originPoint = LEFT_SHOULDER_POINT
@@ -180,6 +181,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 "External Rotation" -> {
                     overlayView.originPoint = RIGHT_ELBOW_POINT
                     overlayView.secondPoint = RIGHT_WRIST_POINT
+                    overlayView.externalRotation = true
                 }
                 "Forward Flexion" -> {
                     overlayView.originPoint = RIGHT_SHOULDER_POINT

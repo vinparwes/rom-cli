@@ -41,6 +41,7 @@ class RomResultsFragment : Fragment() {
             val dateTimeHash = UUID.randomUUID().toString()
             val obj = RomSessionResult(
                 dateFormatted,
+                dateTimeHash,
                 Utility.bitmapToByteArray(bitmapBefore!!),
                 Utility.bitmapToByteArray(bitmapAfter!!),
                 args.finalRom.toInt(),
