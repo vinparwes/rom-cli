@@ -14,15 +14,15 @@ class RegisterFragment : Fragment() {
     private var _binding : FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
-        _binding!!.registerButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToHome) }
-        //TODO
-        _binding!!.loginBUtton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToHome) }
+        setupButtons()
         return binding.root
+    }
+
+    private fun setupButtons() {
+        _binding!!.registerButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToHome) }
+        _binding!!.loginBUtton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToHome) }
     }
 
 }

@@ -13,27 +13,30 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/heading"
+            android:id="@+id/poseIntroductionHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="20dp"
             android:text="Testing"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="34sp" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="200sp"
+            android:layout_height="200sp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
-            android:maxWidth="75dp"
-            android:maxHeight="75dp"
-            tools:src="@tools:sample/avatars" />
+            android:background="@color/white"
+            app:shapeAppearanceOverlay="@style/poseIntroductionContainer"
+            tools:src="@tools:sample/avatars"
+            />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/poseIntroductionExplanation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="45dp"

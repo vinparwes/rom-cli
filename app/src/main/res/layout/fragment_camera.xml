@@ -7,10 +7,10 @@
     tools:context=".ui.fragment.vision.CameraFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cameraLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/red"
-        >
+        android:background="@color/red">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/view_finder"
@@ -24,7 +24,41 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:scaleType="fillStart" />
+            app:scaleType="fillStart">
+
+        </androidx.camera.view.PreviewView>
+
+        <Button
+            android:id="@+id/startStopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="32dp"
+            android:text="@string/start"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeColor="#FFFFFF"
+            app:strokeWidth="3dp" />
+
+        <ImageButton
+            android:id="@+id/switchCameraButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/round_button"
+            android:src="@drawable/rotate_cw"
+            app:circularflow_radiusInDP="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:strokeColor="#FFFFFF"
+            app:strokeWidth="1dp" />
 
         <com.example.rom_cli.ui.fragment.vision.OverlayView
             android:id="@+id/overlay"
@@ -39,17 +73,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/toggleProcess"
-            android:layout_width="124dp"
-            android:layout_height="76dp"
-            android:layout_marginBottom="50dp"
-            android:text="Start"
+        <TextView
+            android:id="@+id/instructionView"
+            android:layout_width="match_parent"
+            android:layout_height="71dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="#FFFFFF"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:text="@string/instruction_one"
+            android:textColor="@color/black"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@id/view_finder"
-
-            app:layout_constraintEnd_toEndOf="@id/view_finder"
-            app:layout_constraintStart_toStartOf="@id/view_finder" />
+            android:typeface="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

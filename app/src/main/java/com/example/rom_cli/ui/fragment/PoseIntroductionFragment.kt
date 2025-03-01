@@ -7,57 +7,60 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import com.example.rom_cli.R
+import com.example.rom_cli.data.PermissionsController
 import com.example.rom_cli.databinding.FragmentPoseIntroductionBinding
 
 class PoseIntroductionFragment : Fragment() {
 
-    private val PERMISSION_REQUEST_CODE = 200
-
-    val args: PoseIntroductionFragmentArgs by navArgs()
-    private var _binding : FragmentPoseIntroductionBinding? = null;
+    private val args: PoseIntroductionFragmentArgs by navArgs()
+    private var _binding : FragmentPoseIntroductionBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         _binding = FragmentPoseIntroductionBinding.inflate(inflater, container, false)
-        binding.heading.text = args.poseSelection
+        setupButtons()
+        setupFields()
+        return binding.root
+    }
+
+    private fun setupFields() {
+        binding.poseIntroductionHeading.text = args.poseSelection
+        when(args.poseSelection) {
+            "Abduction" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.abduction))
+            "Adduction" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.adduction))
+            "External Rotation" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.external_rotation))
+            "Forward Flexion" -> binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.forward_flexion))
+        }
+        when(args.poseSelection) {
+            "Abduction" -> binding.poseIntroductionExplanation.text = resources.getText(R.string.instruction_abduction)
+            "Adduction" -> binding.poseIntroductionExplanation.text = resources.getText(R.string.instruction_adduction)
+            "External Rotation" -> binding.poseIntroductionExplanation.text = resources.getText(R.string.instruction_external_rotation)
+            "Forward Flexion" -> binding.poseIntroductionExplanation.text = resources.getText(R.string.instruction_forward_flexion)
+        }
+    }
+
+    private fun setupButtons() {
         binding.startVision.setOnClickListener {
-            if(getPermission()) {
-                print("POSE: " + args.poseSelection)
-                print("POSITION" + binding.leftRadio.isSelected)
-                val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, binding.leftRadio.isChecked)
+            if(PermissionsController.checkPermission(requireContext(), Manifest.permission.CAMERA)) {
+                val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, !binding.leftRadio.isChecked)
                 Navigation.findNavController(binding.root).navigate(action)
             }
         }
-        //TODO Images
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requestPermission()
-
-    }
-
-    private fun getPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            requireActivity(), arrayOf<String>(Manifest.permission.CAMERA),
-            PERMISSION_REQUEST_CODE
-        )
+        PermissionsController.requestPermission(
+            requireActivity(),
+            PermissionsController.cameraPermissionRequestCode,
+            Manifest.permission.CAMERA)
     }
 
     override fun onRequestPermissionsResult(
@@ -66,7 +69,7 @@ class PoseIntroductionFragment : Fragment() {
         grantResults: IntArray
     ) {
         when (requestCode) {
-            PERMISSION_REQUEST_CODE -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            PermissionsController.cameraPermissionRequestCode -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_SHORT)
                     .show()
             } else {
