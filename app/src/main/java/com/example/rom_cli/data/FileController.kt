@@ -18,7 +18,6 @@ class FileController {
 
     companion object {
         fun getRomResult(context: Context, fileName : String) : RomSessionResult? {
-            
             val file = File(context.filesDir, fileName)
             try {
                 val ois = ObjectInputStream(FileInputStream(file))

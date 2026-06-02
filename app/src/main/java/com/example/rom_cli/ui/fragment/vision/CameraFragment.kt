@@ -29,6 +29,7 @@ import com.example.rom_cli.databinding.FragmentCameraBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import androidx.navigation.findNavController
 
 class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
 
@@ -115,7 +116,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
             args.poseName,
             cameraFacing == CameraSelector.LENS_FACING_FRONT,
             args.leftJoint)
-        Navigation.findNavController(binding.root).navigate(action)
+        binding.root.findNavController().navigate(action)
     }
 
 
