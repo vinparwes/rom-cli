@@ -9,15 +9,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.data.FileController
-import com.example.rom_cli.data.RomSessionResult
-import com.example.rom_cli.data.Utility
+import com.example.rom_cli.data.rom_session.AppDatabase
+import com.example.rom_cli.data.rom_session.RomSessionResult
 import com.example.rom_cli.databinding.FragmentRomResultsBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.UUID
+import androidx.navigation.findNavController
+import androidx.core.graphics.drawable.toDrawable
 
 class RomResultsFragment : Fragment() {
 
@@ -37,26 +44,29 @@ class RomResultsFragment : Fragment() {
 
     private fun setupButtons() {
         binding.romResultsSaveButton.setOnClickListener {
-            val dateFormatted = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-            val dateTimeHash = UUID.randomUUID().toString()
-            val obj = RomSessionResult(
-                dateFormatted,
-                dateTimeHash,
-                Utility.bitmapToByteArray(bitmapBefore!!),
-                Utility.bitmapToByteArray(bitmapAfter!!),
-                args.finalRom.toInt(),
-                args.poseSelection
-            )
-            if(FileController.putObject(obj, requireContext(), dateTimeHash)) {
-                val action = RomResultsFragmentDirections.navigateFromRomResultsToHomeFragment(true)
-                Navigation.findNavController(binding.root).navigate(action)
-            } else {
-                Toast.makeText(context, "Something went wrong..", Toast.LENGTH_LONG).show()
+            val before = bitmapBefore
+            val after = bitmapAfter
+            if (before == null || after == null) {
+                Toast.makeText(context, "Images not ready", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            binding.romResultsSaveButton.isEnabled = false
+            lifecycleScope.launch {
+                val success = withContext(Dispatchers.IO) {
+                    saveSession(before, after)
+                }
+                binding.romResultsSaveButton.isEnabled = true
+                if (success) {
+                    val action = RomResultsFragmentDirections.navigateFromRomResultsToHomeFragment(true)
+                    binding.root.findNavController().navigate(action)
+                } else {
+                    Toast.makeText(context, "Something went wrong..", Toast.LENGTH_LONG).show()
+                }
             }
         }
         binding.romResultsBackButton.setOnClickListener {
             val action = RomResultsFragmentDirections.navigateFromRomResultsToCameraFragment(args.poseSelection, args.leftHandSide)
-            Navigation.findNavController(binding.root).navigate(action)
+            binding.root.findNavController().navigate(action)
         }
     }
 
@@ -98,9 +108,39 @@ class RomResultsFragment : Fragment() {
         )
         bitmapBefore = rotatedBeforeBitmap
         bitmapAfter = rotatedAfterBitmap
-        binding.beforeImageView.setImageDrawable(BitmapDrawable(resources, bitmapBefore))
-        binding.afterImageView.setImageDrawable(BitmapDrawable(resources, bitmapAfter))
+        binding.beforeImageView.setImageDrawable(bitmapBefore?.toDrawable(resources))
+        binding.afterImageView.setImageDrawable(bitmapAfter?.toDrawable(resources))
         binding.romResultsHeading.text = "${args.poseSelection} Results"
         binding.romResultText.text = args.finalRom
+    }
+
+    private suspend fun saveSession(before: Bitmap, after: Bitmap): Boolean {
+        val context = requireContext().applicationContext
+        val dao = AppDatabase.get(context).romSessionDao()
+        val uid = UUID.randomUUID().toString()
+        val dateFormatted = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        val beforePath = FileController.saveSessionImage(context, before, uid, "before")
+        val afterPath = FileController.saveSessionImage(context, after, uid, "after")
+        if (beforePath == null || afterPath == null) {
+            beforePath?.let { File(context.filesDir, it).delete() }
+            afterPath?.let { File(context.filesDir, it).delete() }
+            return false
+        }
+        return try {
+            dao.insert(
+                RomSessionResult(
+                    uid = uid,
+                    dateRecorded = dateFormatted,
+                    beforeImage = beforePath,
+                    afterImage = afterPath,
+                    recordedROM = args.finalRom.toInt(),
+                    poseIdentifier = args.poseSelection,
+                )
+            )
+            true
+        } catch (e: Exception) {
+            FileController.deleteSessionImages(context, beforePath, afterPath)
+            false
+        }
     }
 }
