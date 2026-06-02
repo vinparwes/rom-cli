@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.example.rom_cli.R
 import com.example.rom_cli.databinding.FragmentWelcomeBinding
+import androidx.navigation.findNavController
 
 class WelcomeFragment : Fragment() {
 
@@ -27,7 +28,7 @@ class WelcomeFragment : Fragment() {
 
     private fun setupButtons() {
         _binding!!.registerButton.setOnClickListener {
-            Navigation.findNavController(binding.root).navigate(R.id.navigateToRegistration)
+            binding.root.findNavController().navigate(R.id.navigateToRegistration)
         }
     }
 }

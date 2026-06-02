@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.example.rom_cli.databinding.FragmentShoulderAnalysisBinding
+import androidx.navigation.findNavController
 
 class ShoulderAnalysisFragment : Fragment() {
 
@@ -22,19 +23,19 @@ class ShoulderAnalysisFragment : Fragment() {
     private fun setupButtons() {
         _binding!!.forwardFlexionSelector.setOnClickListener {
             val action = ShoulderAnalysisFragmentDirections.navigateToPoseIntroduction("Forward Flexion")
-            Navigation.findNavController(binding.root).navigate(action)
+            binding.root.findNavController().navigate(action)
         }
         _binding!!.abductionSelector.setOnClickListener {
             val action = ShoulderAnalysisFragmentDirections.navigateToPoseIntroduction("Abduction")
-            Navigation.findNavController(binding.root).navigate(action)
+            binding.root.findNavController().navigate(action)
         }
         _binding!!.adductionSelector.setOnClickListener {
             val action = ShoulderAnalysisFragmentDirections.navigateToPoseIntroduction("Adduction")
-            Navigation.findNavController(binding.root).navigate(action)
+            binding.root.findNavController().navigate(action)
         }
         _binding!!.externalRotationSelector.setOnClickListener {
             val action = ShoulderAnalysisFragmentDirections.navigateToPoseIntroduction("External Rotation")
-            Navigation.findNavController(binding.root).navigate(action)
+            binding.root.findNavController().navigate(action)
         }
     }
 

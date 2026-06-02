@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.R
 import com.example.rom_cli.data.PermissionsController
 import com.example.rom_cli.databinding.FragmentPoseIntroductionBinding
+import androidx.navigation.findNavController
 
 class PoseIntroductionFragment : Fragment() {
 
@@ -50,7 +51,7 @@ class PoseIntroductionFragment : Fragment() {
         binding.startVision.setOnClickListener {
             if(PermissionsController.checkPermission(requireContext(), Manifest.permission.CAMERA)) {
                 val action = PoseIntroductionFragmentDirections.navigateToCamera(args.poseSelection, !binding.leftRadio.isChecked)
-                Navigation.findNavController(binding.root).navigate(action)
+                binding.root.findNavController().navigate(action)
             }
         }
     }

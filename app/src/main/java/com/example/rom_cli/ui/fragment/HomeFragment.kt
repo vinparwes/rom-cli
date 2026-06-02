@@ -10,6 +10,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.R
 import com.example.rom_cli.databinding.FragmentHomeBinding
+import androidx.navigation.findNavController
 
 class HomeFragment : Fragment() {
 
@@ -31,11 +32,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupButtons() {
-        binding.analysisButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToAnalysis) }
-        binding.profileButton.setOnClickListener { Toast.makeText(requireContext(), "Not yet implemented...", Toast.LENGTH_LONG).show() }
+        binding.analysisButton.setOnClickListener { binding.root.findNavController().navigate(R.id.navigateToAnalysis) }
+        //binding.profileButton.setOnClickListener { Toast.makeText(requireContext(), "Not yet implemented...", Toast.LENGTH_LONG).show() }
         //_binding!!.profileButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToProfile) }
-        binding.statisticsButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToStatistics) }
-        binding.aboutButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToAbout) }
+        binding.statisticsButton.setOnClickListener { binding.root.findNavController().navigate(R.id.navigateToStatistics) }
+        binding.aboutButton.setOnClickListener { binding.root.findNavController().navigate(R.id.navigateToAbout) }
     }
 
 }

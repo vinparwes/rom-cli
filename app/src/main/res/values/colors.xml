@@ -10,4 +10,7 @@
     <color name="yellow">#FFFF00</color>
     <color name="green">#0BDA51</color>
     <color name="mp_color_primary">#007F8B</color>
+
+    <color name="pitt_color_background">#003594</color>
+    <color name="pitt_color_theme">#ffb81c</color>
 </resources>

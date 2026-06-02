@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.example.rom_cli.R
 import com.example.rom_cli.databinding.FragmentRegisterBinding
+import androidx.navigation.findNavController
 
 class RegisterFragment : Fragment() {
 
@@ -21,8 +22,8 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setupButtons() {
-        _binding!!.registerButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToHome) }
-        _binding!!.loginBUtton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToHome) }
+        _binding!!.registerButton.setOnClickListener { binding.root.findNavController().navigate(R.id.navigateToHome) }
+        _binding!!.loginBUtton.setOnClickListener { binding.root.findNavController().navigate(R.id.navigateToHome) }
     }
 
 }

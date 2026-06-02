@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.rom_cli.R
 import com.example.rom_cli.databinding.FragmentAnalysisBinding
+import androidx.navigation.findNavController
 
 class AnalysisFragment : Fragment() {
 
@@ -22,7 +23,7 @@ class AnalysisFragment : Fragment() {
     }
 
     private fun setupButtons() {
-        _binding!!.shoulderSelector.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToShoulderAnalysis) }
+        _binding!!.shoulderSelector.setOnClickListener { binding.root.findNavController().navigate(R.id.navigateToShoulderAnalysis) }
         _binding!!.kneeSelector.setOnClickListener { Toast.makeText(context, "Not yet implemented...", Toast.LENGTH_LONG).show() }
     }
 
