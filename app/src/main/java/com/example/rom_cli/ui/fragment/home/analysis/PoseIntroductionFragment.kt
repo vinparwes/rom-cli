@@ -1,4 +1,4 @@
-package com.example.rom_cli.ui.fragment
+package com.example.rom_cli.ui.fragment.home.analysis
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.R
 import com.example.rom_cli.data.PermissionsController

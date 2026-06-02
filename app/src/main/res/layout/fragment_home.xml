@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.HomeFragment">
+    tools:context=".ui.fragment.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -54,13 +54,7 @@
                 android:layout_marginBottom="20dp"
                 android:text="History" />
 
-            <Button
-                android:id="@+id/aboutButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:layout_marginRight="60dp"
-                android:text="About" />
+
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

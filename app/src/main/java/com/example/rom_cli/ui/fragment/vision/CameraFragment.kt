@@ -25,6 +25,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.R
 import com.example.rom_cli.data.PoseLandmarkerHelper
+import com.example.rom_cli.data.settings.SettingsRepository
 import com.example.rom_cli.databinding.FragmentCameraBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import java.util.concurrent.ExecutorService
@@ -130,15 +131,16 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         binding.viewFinder.post {
             setUpCamera()
         }
-        //TODO Hard-coded values?
+        val settings = SettingsRepository(requireContext()).get()
         backgroundExecutor.execute {
             poseLandmarkerHelper = PoseLandmarkerHelper(
                 context = requireContext(),
                 runningMode = RunningMode.LIVE_STREAM,
-                minPoseDetectionConfidence = 0.5f,
-                minPoseTrackingConfidence = 0.5f,
-                minPosePresenceConfidence = 0.5f,
-                currentDelegate = 0,
+                minPoseDetectionConfidence = settings.minPoseDetectionConfidence,
+                minPoseTrackingConfidence = settings.minPoseTrackingConfidence,
+                minPosePresenceConfidence = settings.minPosePresenceConfidence,
+                currentModel = settings.currentModel,
+                currentDelegate = PoseLandmarkerHelper.DELEGATE_CPU,
                 poseLandmarkerHelperListener = this
             )
         }

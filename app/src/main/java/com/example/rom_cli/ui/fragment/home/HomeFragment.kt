@@ -1,16 +1,15 @@
-package com.example.rom_cli.ui.fragment
+package com.example.rom_cli.ui.fragment.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.Navigation
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.R
 import com.example.rom_cli.databinding.FragmentHomeBinding
-import androidx.navigation.findNavController
 
 class HomeFragment : Fragment() {
 
@@ -33,10 +32,6 @@ class HomeFragment : Fragment() {
 
     private fun setupButtons() {
         binding.analysisButton.setOnClickListener { binding.root.findNavController().navigate(R.id.navigateToAnalysis) }
-        //binding.profileButton.setOnClickListener { Toast.makeText(requireContext(), "Not yet implemented...", Toast.LENGTH_LONG).show() }
-        //_binding!!.profileButton.setOnClickListener { Navigation.findNavController(binding.root).navigate(R.id.navigateToProfile) }
         binding.statisticsButton.setOnClickListener { binding.root.findNavController().navigate(R.id.navigateToStatistics) }
-        binding.aboutButton.setOnClickListener { binding.root.findNavController().navigate(R.id.navigateToAbout) }
     }
-
 }

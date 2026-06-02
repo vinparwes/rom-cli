@@ -6,7 +6,7 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.rom_cli.ui.fragment.HomeFragment"
+        android:name="com.example.rom_cli.ui.fragment.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.rom_cli.ui.fragment.ProfileFragment"
+        android:name="com.example.rom_cli.ui.fragment.home.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.rom_cli.ui.fragment.RegisterFragment"
+        android:name="com.example.rom_cli.ui.fragment.onboarding.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -56,7 +56,7 @@
     </fragment>
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.example.rom_cli.ui.fragment.WelcomeFragment"
+        android:name="com.example.rom_cli.ui.fragment.onboarding.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome" >
         <action
@@ -64,9 +64,16 @@
             app:destination="@id/registerFragment"
             app:enterAnim="@android:anim/fade_in" />
     </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.rom_cli.ui.fragment.home.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
+
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.example.rom_cli.ui.fragment.AboutFragment"
+        android:name="com.example.rom_cli.ui.fragment.home.info.AboutFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" >
         <action
@@ -92,7 +99,7 @@
     </fragment>
     <fragment
         android:id="@+id/analysisFragment"
-        android:name="com.example.rom_cli.ui.fragment.AnalysisFragment"
+        android:name="com.example.rom_cli.ui.fragment.home.analysis.AnalysisFragment"
         android:label="fragment_analysis"
         tools:layout="@layout/fragment_analysis" >
         <action
@@ -106,7 +113,7 @@
     </fragment>
     <fragment
         android:id="@+id/shoulderAnalysisFragment"
-        android:name="com.example.rom_cli.ui.fragment.ShoulderAnalysisFragment"
+        android:name="com.example.rom_cli.ui.fragment.home.analysis.ShoulderAnalysisFragment"
         android:label="fragment_shoulder_analysis"
         tools:layout="@layout/fragment_shoulder_analysis" >
         <action
@@ -122,7 +129,7 @@
     </fragment>
     <fragment
         android:id="@+id/poseIntroductionFragment"
-        android:name="com.example.rom_cli.ui.fragment.PoseIntroductionFragment"
+        android:name="com.example.rom_cli.ui.fragment.home.analysis.PoseIntroductionFragment"
         android:label="fragment_pose_introduction"
         tools:layout="@layout/fragment_pose_introduction" >
         <argument
@@ -187,7 +194,7 @@
     </fragment>
     <fragment
         android:id="@+id/romHistoryFragment"
-        android:name="com.example.rom_cli.ui.fragment.RomHistoryFragment"
+        android:name="com.example.rom_cli.ui.fragment.home.history.RomHistoryFragment"
         android:label="fragment_rom_history"
         tools:layout="@layout/fragment_rom_history" >
         <argument
