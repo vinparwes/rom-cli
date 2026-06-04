@@ -52,15 +52,14 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.8")
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.8")
     implementation("androidx.window:window:1.1.0-alpha03")
 
     implementation("androidx.camera:camera-lifecycle:1.3.2")
     implementation("androidx.camera:camera-camera2:1.3.2")
     implementation("androidx.camera:camera-view:1.3.2")
 
-    implementation("com.google.gms:google-services:4.4.1")
     implementation("com.google.android.material:material:1.11.0")
 
     implementation("com.google.guava:guava:31.0.1-android")

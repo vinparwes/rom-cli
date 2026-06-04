@@ -1,1 +1,1 @@
-.readme
+JDK 17+ and AGP 9.1.x. AGP requires Gradle 9.3.1+. Do not use Gradle 8.x with this project.
