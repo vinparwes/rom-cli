@@ -7,10 +7,11 @@
     <string name="about_paragraph_2">Landmarks (or specific body points) are calculated live through artificial intelligence provided by Mediapipe</string>
     <string name="about_paragraph_3">Resulting before- and after images are saved <b>locally</b> within the context of the application and will be removed on uninstall unless saved as images on your local computer</string>
     <string name="about_paragraph_4">This application has been developed by Vincent Westlund at the behest of Malmö, and Pittsburgh University.</string>
-    <!-- TODO: Add links for contact e.g -->
+
     <string name="about_header_instruction">How To?</string>
     <string name="about_paragraph_howto_1">Every pose has a distinct description and example. Follow these for the best results.</string>
-    <string name="about_paragraph_howto_2">The camera-view offers step-by-step instructions while running.</string>
+    <string name="about_paragraph_howto_2">The camera-view offers a simple step-by-step instructions while running.</string>
+
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="instruction_one">Align the <b>Green</b> point with the <b>Red</b> circle</string>
@@ -21,6 +22,7 @@
     <string name="instruction_adduction">Lying down, align your left or right shoulder with the green circle. Hold out the entire arm according to the picture and press start. Rotate your arm clockwise towards your other shoulder.</string>
     <string name="instruction_external_rotation">Face left or right within the view of the camera. Align the left or right shoulder with the green circle. Raise your arm to 90 degrees and hold out your forearm as specified. Start the session and move your forearm backwards towards your shoulder.</string>
     <string name="instruction_forward_flexion">Face left or right within the view of the camera. Align the left or right shoulder with the green circle. Relax your arms and start the session. Move the selected left or right arm backward and the opposite arm forward as specified in the picture.</string>
+    <string name="instruction_flexion">Face left or right within the view of the camera and align your selected shoulder with the center point. Move your left or right arm in an arc as described by the picture.</string>
 
     <string name="settings_heading">Settings</string>
     <string name="settings_section_pose">Pose landmarker</string>
@@ -37,4 +39,5 @@
     <string name="settings_save">Save settings</string>
     <string name="settings_saved">Settings saved</string>
     <string name="settings_apply_hint">Tap Save to confirm. Changes apply the next time you open the camera for an analysis.</string>
+
 </resources>

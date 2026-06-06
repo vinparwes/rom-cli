@@ -36,6 +36,9 @@ class ShoulderAnalysisFragment : Fragment() {
             val action = ShoulderAnalysisFragmentDirections.navigateToPoseIntroduction("External Rotation")
             binding.root.findNavController().navigate(action)
         }
+        _binding!!.flexionSelector.setOnClickListener {
+            val action = ShoulderAnalysisFragmentDirections.navigateToPoseIntroduction("Flexion")
+            binding.root.findNavController().navigate(action)
+        }
     }
-
 }

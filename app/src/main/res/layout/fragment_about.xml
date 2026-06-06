@@ -20,11 +20,11 @@
                 android:id="@+id/aboutHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
                 android:layout_marginBottom="30dp"
                 android:text="@string/about_header"
-                android:textAlignment="center"
+                android:textAlignment="inherit"
                 android:textAppearance="@style/TextAppearance.Romcli.Headline"
                 android:textSize="30sp" />
 
@@ -68,12 +68,12 @@
                 android:id="@+id/aboutHowTo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="25dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="25dp"
                 android:layout_marginBottom="30dp"
                 android:text="@string/about_header_instruction"
-                android:textAlignment="center"
+                android:textAlignment="inherit"
                 android:textAppearance="@style/TextAppearance.Romcli.Headline" />
             <TextView
                 android:id="@+id/aboutPar5"

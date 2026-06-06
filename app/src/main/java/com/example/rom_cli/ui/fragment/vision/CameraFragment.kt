@@ -175,6 +175,11 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                     overlayView.secondPoint = LEFT_WRIST_POINT
                     overlayView.thirdPoint = RIGHT_WRIST_POINT
                 }
+                "Flexion" -> {
+                    overlayView.originPoint = LEFT_SHOULDER_POINT
+                    overlayView.secondPoint = LEFT_WRIST_POINT
+                    overlayView.externalRotation = true
+                }
             }
         } else {
             when(poseName) {
@@ -195,6 +200,11 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                     overlayView.originPoint = RIGHT_SHOULDER_POINT
                     overlayView.secondPoint = RIGHT_WRIST_POINT
                     overlayView.thirdPoint = LEFT_WRIST_POINT
+                }
+                "Flexion" -> {
+                    overlayView.originPoint = RIGHT_SHOULDER_POINT
+                    overlayView.secondPoint = RIGHT_WRIST_POINT
+                    overlayView.externalRotation = true
                 }
             }
         }
