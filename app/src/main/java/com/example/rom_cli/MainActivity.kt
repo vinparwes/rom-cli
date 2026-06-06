@@ -18,7 +18,11 @@ class MainActivity : AppCompatActivity() {
         val topLevelDestinations = setOf(
             R.id.homeFragment,
             R.id.aboutFragment,
-            R.id.settingsFragment
+            R.id.settingsFragment,
+            R.id.poseIntroductionFragment,
+            R.id.shoulderAnalysisFragment,
+            R.id.romHistoryFragment,
+            R.id.analysisFragment
         )
         bottomNav.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { _, destination, _ ->

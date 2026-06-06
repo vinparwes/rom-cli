@@ -37,15 +37,6 @@
                 android:text="Analysis" />
 
             <Button
-                android:id="@+id/profileButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:layout_marginRight="60dp"
-                android:layout_marginBottom="20dp"
-                android:text="Profile" />
-
-            <Button
                 android:id="@+id/statisticsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

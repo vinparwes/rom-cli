@@ -1,4 +1,4 @@
-package com.example.rom_cli.data
+package com.example.rom_cli.domain
 
 enum class LandmarkSelector(selection: Int) {
     LEFT_SHOULDER_POINT(11),

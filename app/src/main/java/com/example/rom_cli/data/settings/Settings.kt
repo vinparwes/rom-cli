@@ -1,12 +1,13 @@
 package com.example.rom_cli.data.settings
 
-import com.example.rom_cli.data.PoseLandmarkerHelper
+import com.example.rom_cli.domain.PoseLandmarkerHelper
 
 data class Settings(
     val minPoseDetectionConfidence: Float,
     val minPoseTrackingConfidence: Float,
     val minPosePresenceConfidence: Float,
     val currentModel: Int,
+    val facingFront: Boolean
 ) {
     companion object {
         fun defaults() = Settings(
@@ -14,6 +15,7 @@ data class Settings(
             minPoseTrackingConfidence = PoseLandmarkerHelper.DEFAULT_POSE_TRACKING_CONFIDENCE,
             minPosePresenceConfidence = PoseLandmarkerHelper.DEFAULT_POSE_PRESENCE_CONFIDENCE,
             currentModel = PoseLandmarkerHelper.MODEL_POSE_LANDMARKER_FULL,
+            facingFront = false,
         )
     }
 }

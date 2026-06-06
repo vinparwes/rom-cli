@@ -4,14 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.ActivityCompat
 
 class PermissionsController {
 
     companion object {
-        val cameraPermissionRequestCode = 200
-        val storagePermissionRequestCode = 100
+        const val cameraPermissionRequestCode = 200
+        const val storagePermissionRequestCode = 100
 
         fun requestPermission(activity: Activity, requestCode: Int, permission: String) {
             ActivityCompat.requestPermissions(

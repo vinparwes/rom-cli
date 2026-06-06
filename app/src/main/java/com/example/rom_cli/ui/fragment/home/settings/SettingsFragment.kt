@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import com.example.rom_cli.R
-import com.example.rom_cli.data.PoseLandmarkerHelper
+import com.example.rom_cli.domain.PoseLandmarkerHelper
 import com.example.rom_cli.data.settings.Settings
 import com.example.rom_cli.data.settings.SettingsRepository
 import com.example.rom_cli.databinding.FragmentSettingsBinding
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 
 class SettingsFragment : Fragment() {
 
@@ -47,30 +47,31 @@ class SettingsFragment : Fragment() {
             PoseLandmarkerHelper.MODEL_POSE_LANDMARKER_HEAVY -> binding.modelHeavy.isChecked = true
             else -> binding.modelFull.isChecked = true
         }
+        if (settings.facingFront) {
+            binding.cameraFacingFront.isChecked = true
+        } else {
+            binding.cameraFacingBack.isChecked = true
+        }
         updateConfidenceLabels(settings)
         isBindingUi = false
     }
 
     private fun setupListeners() {
         val sliderListener = Slider.OnChangeListener { _, _, _ ->
-            persistFromUi()
+            if (!isBindingUi) {
+                updateConfidenceLabels(readSettingsFromUi())
+            }
         }
         binding.detectionConfidenceSlider.addOnChangeListener(sliderListener)
         binding.trackingConfidenceSlider.addOnChangeListener(sliderListener)
         binding.presenceConfidenceSlider.addOnChangeListener(sliderListener)
 
-        binding.modelRadioGroup.setOnCheckedChangeListener { _, _ ->
-            if (!isBindingUi) {
-                persistFromUi()
-            }
+        binding.settingsSaveButton.setOnClickListener {
+            val settings = readSettingsFromUi()
+            settingsRepository.save(settings)
+            updateConfidenceLabels(settings)
+            Snackbar.make(binding.root, R.string.settings_saved, Snackbar.LENGTH_SHORT).show()
         }
-    }
-
-    private fun persistFromUi() {
-        if (isBindingUi) return
-        val settings = readSettingsFromUi()
-        updateConfidenceLabels(settings)
-        settingsRepository.save(settings)
     }
 
     private fun readSettingsFromUi(): Settings = Settings(
@@ -78,6 +79,7 @@ class SettingsFragment : Fragment() {
         minPoseTrackingConfidence = binding.trackingConfidenceSlider.value,
         minPosePresenceConfidence = binding.presenceConfidenceSlider.value,
         currentModel = selectedModel(),
+        facingFront = binding.cameraFacingFront.isChecked,
     )
 
     private fun selectedModel(): Int = when (binding.modelRadioGroup.checkedRadioButtonId) {

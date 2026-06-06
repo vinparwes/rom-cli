@@ -1,4 +1,4 @@
-package com.example.rom_cli.data
+package com.example.rom_cli.domain
 
 enum class ShoulderPose(primary: LandmarkSelector, secondary: LandmarkSelector) {
 

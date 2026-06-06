@@ -24,6 +24,7 @@ class SettingsRepository(context: Context) {
                 defaults.minPosePresenceConfidence
             ),
             currentModel = prefs.getInt(KEY_CURRENT_MODEL, defaults.currentModel),
+            facingFront = prefs.getBoolean(KEY_FACING_FRONT, defaults.facingFront),
         )
     }
 
@@ -33,6 +34,7 @@ class SettingsRepository(context: Context) {
                 .putFloat(KEY_MIN_POSE_TRACKING_CONFIDENCE, settings.minPoseTrackingConfidence)
                 .putFloat(KEY_MIN_POSE_PRESENCE_CONFIDENCE, settings.minPosePresenceConfidence)
                 .putInt(KEY_CURRENT_MODEL, settings.currentModel)
+                .putBoolean(KEY_FACING_FRONT, settings.facingFront)
         }
     }
 
@@ -42,5 +44,6 @@ class SettingsRepository(context: Context) {
         private const val KEY_MIN_POSE_TRACKING_CONFIDENCE = "min_pose_tracking_confidence"
         private const val KEY_MIN_POSE_PRESENCE_CONFIDENCE = "min_pose_presence_confidence"
         private const val KEY_CURRENT_MODEL = "current_model"
+        private const val KEY_FACING_FRONT = "facing_front"
     }
 }

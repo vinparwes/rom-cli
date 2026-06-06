@@ -24,7 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.rom_cli.R
-import com.example.rom_cli.data.PoseLandmarkerHelper
+import com.example.rom_cli.domain.PoseLandmarkerHelper
 import com.example.rom_cli.data.settings.SettingsRepository
 import com.example.rom_cli.databinding.FragmentCameraBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
@@ -128,10 +128,15 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         val overlayView = view.findViewById<OverlayView>(R.id.overlay)
         assignPoseMarkings(overlayView, args.poseName)
         backgroundExecutor = Executors.newSingleThreadExecutor()
+        val settings = SettingsRepository(requireContext()).get()
+        cameraFacing = if (settings.facingFront) {
+            CameraSelector.LENS_FACING_FRONT
+        } else {
+            CameraSelector.LENS_FACING_BACK
+        }
         binding.viewFinder.post {
             setUpCamera()
         }
-        val settings = SettingsRepository(requireContext()).get()
         backgroundExecutor.execute {
             poseLandmarkerHelper = PoseLandmarkerHelper(
                 context = requireContext(),
