@@ -20,7 +20,7 @@
             android:layout_marginBottom="20dp"
             android:text="Testing"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.Romcli.Headline"
             android:textSize="34sp" />
 
         <com.google.android.material.imageview.ShapeableImageView

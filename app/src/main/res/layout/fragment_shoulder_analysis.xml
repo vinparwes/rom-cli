@@ -24,7 +24,7 @@
                 android:layout_marginBottom="20dp"
                 android:text="Select Motion"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.Romcli.Headline" />
 
             <Button
                 android:id="@+id/forwardFlexionSelector"
@@ -59,7 +59,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="45dp"
                 android:layout_marginRight="45dp"
+                android:layout_marginBottom="10dp"
                 android:text="External Rotation" />
+
+            <Button
+                android:id="@+id/flexionSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+
+                android:text="Flexion" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

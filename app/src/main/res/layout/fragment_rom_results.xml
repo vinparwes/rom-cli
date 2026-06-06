@@ -6,81 +6,89 @@
     android:textAlignment="center"
     tools:context=".ui.fragment.RomResultsFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/romResultsHeading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:text="Adduction Results"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="34sp" />
-
-        <TextView
-            android:id="@+id/romResultText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="Placeholder"
-            android:textAlignment="center"
-            android:textSize="24sp" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="18dp" />
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="24dp">
 
-            <ImageView
-                android:id="@+id/beforeImageView"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/romResultsHeading"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:text="Adduction Results"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.Romcli.Headline"
+                android:textSize="34sp" />
 
-                />
-
-            <ImageView
-                android:id="@+id/afterImageView"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/romResultText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginBottom="20dp"
+                android:text="Placeholder"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.Romcli.Body"
+                android:textSize="24sp" />
 
-                />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="18dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/beforeImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@null" />
+
+                <ImageView
+                    android:id="@+id/afterImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@null" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="18dp" />
+
+            <Button
+                android:id="@+id/romResultsSaveButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginRight="100dp"
+                android:text="Submit" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="18dp" />
+
+            <Button
+                android:id="@+id/romResultsBackButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginRight="100dp"
+                android:text="Try Again" />
         </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="18dp" />
-
-        <Button
-            android:id="@+id/romResultsSaveButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
-            android:text="Submit" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="18dp" />
-
-        <Button
-            android:id="@+id/romResultsBackButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
-            android:text="Try Again" />
-    </LinearLayout>
+    </ScrollView>
 </FrameLayout>

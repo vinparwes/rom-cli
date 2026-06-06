@@ -153,7 +153,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     }
 
     private fun isPositionLocked() {
-        if(results!!.landmarks().size > 0) {
+        if(results!!.landmarks().isNotEmpty()) {
             val landmark = results!!.landmarks().first()
             val primary = landmark[originPoint!!]
             positionLocked = (inRange(primary.x(), targetPoint.first, 0.06f)
@@ -166,7 +166,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     }
 
     fun markBasePosition() {
-        if(results!!.landmarks().size > 0 && originPoint != null) {
+        if(results!!.landmarks().isNotEmpty() && originPoint != null) {
             val mark = results!!.landmarks().first()
             val lm = mark[secondPoint!!]
             basePoint = Pair(lm.x(), lm.y())

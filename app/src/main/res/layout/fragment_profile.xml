@@ -23,7 +23,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="Profile"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.Romcli.Headline" />
 
             <LinearLayout
                 android:layout_width="match_parent"

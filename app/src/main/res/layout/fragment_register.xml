@@ -22,7 +22,7 @@
                 android:layout_marginLeft="45dp"
                 android:layout_marginRight="45dp"
                 android:text="Username.."
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.Romcli.Body" />
 
             <EditText
                 android:id="@+id/inputUsername"
@@ -35,7 +35,7 @@
                 android:ems="10"
                 android:hyphenationFrequency="fullFast"
                 android:inputType="text"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.Romcli.Headline" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -44,7 +44,7 @@
                 android:layout_marginLeft="45dp"
                 android:layout_marginRight="45dp"
                 android:text="Password.."
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.Romcli.Body" />
 
             <EditText
                 android:id="@+id/inputPassword"

@@ -25,7 +25,7 @@
                 android:layout_marginBottom="20dp"
                 android:text="Joint Analysis"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.Romcli.Headline" />
 
             <Button
                 android:id="@+id/shoulderSelector"

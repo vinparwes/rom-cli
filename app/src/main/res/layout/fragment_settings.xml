@@ -27,14 +27,14 @@
                 android:layout_marginBottom="24dp"
                 android:text="@string/settings_heading"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.Romcli.Headline" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:text="@string/settings_section_pose"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.Romcli.Body" />
 
             <TextView
                 android:id="@+id/detectionConfidenceLabel"
@@ -87,7 +87,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/settings_section_model"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.Romcli.Body" />
 
             <RadioGroup
                 android:id="@+id/modelRadioGroup"
@@ -120,7 +120,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/settings_section_camera"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.Romcli.Body" />
 
             <RadioGroup
                 android:id="@+id/cameraFacingRadioGroup"
@@ -153,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/settings_apply_hint"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                android:textAppearance="@style/TextAppearance.Romcli.Label" />
 
         </LinearLayout>
     </ScrollView>

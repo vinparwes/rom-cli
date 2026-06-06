@@ -25,7 +25,7 @@
                 android:layout_marginBottom="30dp"
                 android:text="@string/about_header"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textAppearance="@style/TextAppearance.Romcli.Headline"
                 android:textSize="30sp" />
 
             <TextView
@@ -74,7 +74,7 @@
                 android:layout_marginBottom="30dp"
                 android:text="@string/about_header_instruction"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.Romcli.Headline" />
             <TextView
                 android:id="@+id/aboutPar5"
                 android:layout_width="match_parent"

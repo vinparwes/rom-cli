@@ -1,5 +1,21 @@
 <resources>
 
+    <style name="TextAppearance.Romcli.Headline" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.Romcli.Body" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.Romcli.Label" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.Romcli.Display" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="Widget.Theme.Romcli.MyView" parent="">
         <item name="android:background">@color/gray_400</item>
         <item name="exampleColor">@color/light_blue_400</item>

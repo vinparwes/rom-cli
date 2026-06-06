@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:text="Home"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.Romcli.Headline" />
 
             <Space
                 android:layout_width="match_parent"
