@@ -19,10 +19,12 @@
     <string name="instruction_three">Input ROM</string>
 
     <string name="instruction_abduction">Face left or right within the view of the camera. Align the left or right shoulder with the green circle. Relax your arm, start the session and move it in the motion specified in the picture.</string>
-    <string name="instruction_adduction">Lying down, align your left or right shoulder with the green circle. Hold out the entire arm according to the picture and press start. Rotate your arm clockwise towards your other shoulder.</string>
+    <string name="instruction_adduction">Face the camera. Align the left or right shoulder with the green circle. Start the session. Raise your arm up to 45 degrees.</string>
     <string name="instruction_external_rotation">Face left or right within the view of the camera. Align the left or right shoulder with the green circle. Raise your arm to 90 degrees and hold out your forearm as specified. Start the session and move your forearm backwards towards your shoulder.</string>
-    <string name="instruction_forward_flexion">Face left or right within the view of the camera. Align the left or right shoulder with the green circle. Relax your arms and start the session. Move the selected left or right arm backward and the opposite arm forward as specified in the picture.</string>
+    <string name="instruction_forward_flexion">Face the camera. Align the left or right shoulder with the green circle. Relax your arms and start the session. Move the selected left or right arm backward and the opposite arm forward as specified in the picture.</string>
     <string name="instruction_flexion">Face left or right within the view of the camera and align your selected shoulder with the center point. Move your left or right arm in an arc as described by the picture.</string>
+
+
 
     <string name="settings_heading">Settings</string>
     <string name="settings_section_pose">Pose landmarker</string>
