@@ -75,14 +75,14 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     private fun switchCamera() : Int {
         if(cameraFacing == CameraSelector.LENS_FACING_FRONT) {
             cameraFacing = CameraSelector.LENS_FACING_BACK
-            setUpCamera()
-            return 1
         } else if(cameraFacing == CameraSelector.LENS_FACING_BACK){
             cameraFacing = CameraSelector.LENS_FACING_FRONT
-            setUpCamera()
-            return 0
+        } else {
+            return 42
         }
-        return 42
+        assignPoseMarkings(binding.overlay, args.poseName)
+        setUpCamera()
+        return if (cameraFacing == CameraSelector.LENS_FACING_BACK) 1 else 0
     }
 
     private fun toggleRecording() {
@@ -125,8 +125,6 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         runningFlag = false
-        val overlayView = view.findViewById<OverlayView>(R.id.overlay)
-        assignPoseMarkings(overlayView, args.poseName)
         backgroundExecutor = Executors.newSingleThreadExecutor()
         val settings = SettingsRepository(requireContext()).get()
         cameraFacing = if (settings.facingFront) {
@@ -134,6 +132,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
         } else {
             CameraSelector.LENS_FACING_BACK
         }
+        assignPoseMarkings(binding.overlay, args.poseName)
         binding.viewFinder.post {
             setUpCamera()
         }
@@ -152,10 +151,13 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
     }
 
     private fun assignPoseMarkings(overlayView: OverlayView, poseName: String) {
-        Log.i("INFO", "SETTING leftHandRecording TO: ${!args.leftJoint}")
-        binding.overlay.leftHandRecording = !args.leftJoint
-        Log.i("INFO", "OVERLAY leftHandRecording IS: ${binding.overlay.leftHandRecording}")
-        if(args.leftJoint) {
+        val isBack = cameraFacing == CameraSelector.LENS_FACING_BACK
+        val useLeftLandmarks = if (isBack) !args.leftJoint else args.leftJoint
+        overlayView.leftHandRecording = if (isBack) args.leftJoint else !args.leftJoint
+        overlayView.externalRotation = false
+        overlayView.thirdPoint = null
+
+        if (useLeftLandmarks) {
             when(poseName) {
                 "Abduction" -> {
                     overlayView.originPoint = LEFT_SHOULDER_POINT
@@ -182,7 +184,7 @@ class CameraFragment : Fragment(), PoseLandmarkerHelper.LandmarkerListener {
                 }
             }
         } else {
-            when(poseName) {
+            when (poseName) {
                 "Abduction" -> {
                     overlayView.originPoint = RIGHT_SHOULDER_POINT
                     overlayView.secondPoint = RIGHT_ELBOW_POINT
